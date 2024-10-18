@@ -12,7 +12,7 @@
       :disabled-column-keys="['title']"
       @refresh="search"
     >
-      <template #custom-left>
+      <template #toolbar-left>
         <a-input v-model="queryForm.title" placeholder="请输入标题" allow-clear @change="search">
           <template #prefix><icon-search /></template>
         </a-input>
@@ -24,12 +24,15 @@
           style="width: 150px"
           @change="search"
         />
-        <a-button @click="reset">重置</a-button>
+        <a-button @click="reset">
+          <template #icon><icon-refresh /></template>
+          <template #default>重置</template>
+        </a-button>
       </template>
-      <template #custom-right>
+      <template #toolbar-right>
         <a-button v-permission="['system:notice:add']" type="primary" @click="onAdd">
           <template #icon><icon-plus /></template>
-          <span>新增</span>
+          <template #default>新增</template>
         </a-button>
       </template>
       <template #title="{ record }">
@@ -48,14 +51,10 @@
         </a-space>
       </template>
     </GiTable>
-    <NoticeAddModal ref="NoticeAddModalRef" @save-success="search" />
-    <NoticeDetailModal ref="NoticeDetailModalRef" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import NoticeAddModal from './NoticeAddModal.vue'
-import NoticeDetailModal from './NoticeDetailModal.vue'
 import { type NoticeQuery, type NoticeResp, deleteNotice, listNotice } from '@/apis/system'
 import type { TableInstanceColumns } from '@/components/GiTable/type'
 import { useTable } from '@/hooks'
@@ -119,23 +118,18 @@ const onDelete = (record: NoticeResp) => {
   })
 }
 
-const NoticeAddModalRef = ref<InstanceType<typeof NoticeAddModal>>()
 // 新增
 const onAdd = () => {
-  // NoticeAddModalRef.value?.onAdd()
   router.push({ path: '/system/notice/add' })
 }
 
 // 修改
 const onUpdate = (record: NoticeResp) => {
-  // NoticeAddModalRef.value?.onUpdate(record.id)
   router.push({ path: '/system/notice/add', query: { id: record.id, type: 'edit' } })
 }
 
-const NoticeDetailModalRef = ref<InstanceType<typeof NoticeDetailModal>>()
 // 详情
 const onDetail = (record: NoticeResp) => {
-  // NoticeDetailModalRef.value?.onDetail(record.id)
   router.push({ path: '/system/notice/detail', query: { id: record.id } })
 }
 </script>

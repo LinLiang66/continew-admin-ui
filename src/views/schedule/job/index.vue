@@ -12,7 +12,7 @@
       :disabled-column-keys="['name']"
       @refresh="search"
     >
-      <template #custom-left>
+      <template #toolbar-left>
         <a-select
           v-model="queryForm.groupName"
           placeholder="请选择任务组"
@@ -22,12 +22,15 @@
         />
         <a-input v-model="queryForm.jobName" placeholder="请输入任务名称" allow-clear @change="search" />
         <a-select v-model="queryForm.jobStatus" placeholder="请选择任务状态" :options="job_status_enum" allow-clear style="width: 150px" @change="search" />
-        <a-button @click="reset">重置</a-button>
+        <a-button @click="reset">
+          <template #icon><icon-refresh /></template>
+          <template #default>重置</template>
+        </a-button>
       </template>
-      <template #custom-right>
+      <template #toolbar-right>
         <a-button v-permission="['schedule:job:add']" type="primary" @click="onAdd">
           <template #icon><icon-plus /></template>
-          <span>新增</span>
+          <template #default>新增</template>
         </a-button>
       </template>
       <template #jobName="{ record }">

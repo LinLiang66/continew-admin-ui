@@ -16,27 +16,22 @@
         <IconDown v-if="expanded" />
         <IconRight v-else />
       </template>
-      <template #custom-left>
-        <a-input v-model="queryForm.title" placeholder="请输入菜单标题" allow-clear @change="search">
+      <template #toolbar-left>
+        <a-input v-model="title" placeholder="请输入菜单标题" allow-clear @change="search">
           <template #prefix><icon-search /></template>
         </a-input>
-        <a-select
-          v-model="queryForm.status"
-          :options="DisEnableStatusList"
-          placeholder="请选择状态"
-          allow-clear
-          style="width: 150px"
-          @change="search"
-        />
-        <a-button @click="reset">重置</a-button>
+        <a-button @click="reset">
+          <template #icon><icon-refresh /></template>
+          <template #default>重置</template>
+        </a-button>
       </template>
-      <template #custom-right>
+      <template #toolbar-right>
         <a-button v-permission="['system:menu:add']" type="primary" @click="onAdd()">
           <template #icon><icon-plus /></template>
-          <span>新增</span>
+          <template #default>新增</template>
         </a-button>
         <a-tooltip content="展开/折叠">
-          <a-button class="gi_hover_btn-border" @click="onExpanded">
+          <a-button @click="onExpanded">
             <template #icon>
               <icon-list v-if="!isExpanded" />
               <icon-mind-mapping v-else />
@@ -88,23 +83,47 @@ import MenuAddModal from './MenuAddModal.vue'
 import { type MenuQuery, type MenuResp, deleteMenu, listMenu } from '@/apis/system'
 import type GiTable from '@/components/GiTable/index.vue'
 import type { TableInstanceColumns } from '@/components/GiTable/type'
-import { DisEnableStatusList } from '@/constant/common'
 import { isMobile } from '@/utils'
 import has from '@/utils/has'
 import { useTable } from '@/hooks'
 
 defineOptions({ name: 'SystemMenu' })
 
-const queryForm = reactive<MenuQuery>({
-  sort: ['parentId,asc', 'sort,asc', 'createTime,desc']
-})
-
+const queryForm = reactive<MenuQuery>({})
 const {
-  tableData: dataList,
+  tableData,
   loading,
   search,
   handleDelete
 } = useTable(() => listMenu(queryForm), { immediate: true })
+
+// 过滤树
+const title = ref('')
+const searchData = (title: string) => {
+  const loop = (data: MenuResp[]) => {
+    const result = [] as MenuResp[]
+    data.forEach((item: MenuResp) => {
+      if (item.title?.toLowerCase().includes(title.toLowerCase())) {
+        result.push({ ...item })
+      } else if (item.children) {
+        const filterData = loop(item.children)
+        if (filterData.length) {
+          result.push({
+            ...item,
+            children: filterData
+          })
+        }
+      }
+    })
+    return result
+  }
+  return loop(tableData.value)
+}
+
+const dataList = computed(() => {
+  if (!title.value) return tableData.value
+  return searchData(title.value)
+})
 
 const columns: TableInstanceColumns[] = [
   { title: '菜单标题', dataIndex: 'title', slotName: 'title', width: 170, fixed: !isMobile() ? 'left' : undefined },
@@ -134,9 +153,7 @@ const columns: TableInstanceColumns[] = [
 
 // 重置
 const reset = () => {
-  queryForm.title = undefined
-  queryForm.status = undefined
-  search()
+  title.value = ''
 }
 
 // 删除

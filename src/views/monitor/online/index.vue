@@ -11,12 +11,15 @@
       :disabled-tools="['size']"
       @refresh="search"
     >
-      <template #custom-left>
+      <template #toolbar-left>
         <a-input v-model="queryForm.nickname" placeholder="请输入用户名/昵称" allow-clear @change="search">
           <template #prefix><icon-search /></template>
         </a-input>
         <DateRangePicker v-model="queryForm.loginTime" @change="search" />
-        <a-button @click="reset">重置</a-button>
+        <a-button @click="reset">
+          <template #icon><icon-refresh /></template>
+          <template #default>重置</template>
+        </a-button>
       </template>
       <template #nickname="{ record }">{{ record.nickname }}（{{ record.username }}）</template>
       <template #action="{ record }">

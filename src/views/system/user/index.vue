@@ -2,49 +2,43 @@
   <div class="table-page">
     <a-row justify="space-between" align="center" class="header page_header">
       <a-space wrap>
-        <slot name="custom-title">
-          <div class="title">用户管理</div>
-        </slot>
+        <div class="title">用户管理</div>
       </a-space>
     </a-row>
     <a-row align="stretch" :gutter="14" class="h-full page_content">
-      <a-col :xs="0" :sm="8" :md="7" :lg="6" :xl="5" :xxl="4" flex="260px" class="h-full ov-hidden">
-        <DeptTree placeholder="请输入名称/描述" @node-click="handleSelectDept" />
+      <a-col :xs="0" :sm="0" :md="6" :lg="5" :xl="5" :xxl="4" class="h-full ov-hidden">
+        <DeptTree placeholder="请输入名称" @node-click="handleSelectDept" />
       </a-col>
-      <a-col :xs="24" :sm="16" :md="17" :lg="18" :xl="19" :xxl="20" flex="1" class="h-full ov-hidden">
-        <GiTable row-key="id" :data="dataList" :columns="columns" :loading="loading"
-                 :scroll="{ x: '100%', y: '100%', minWidth: 1500 }" :pagination="pagination" :disabled-tools="['size']"
-                 :disabled-column-keys="['username']" @refresh="search">
-          <template #custom-left>
-            <a-input v-model="queryForm.description" placeholder="请输入用户名/昵称/描述" allow-clear @change="search">
-              <template #prefix>
-                <icon-search />
-              </template>
-            </a-input>
-            <a-select v-model="queryForm.status" :options="DisEnableStatusList" placeholder="请选择状态" allow-clear
-                      style="width: 150px" @change="search" />
-            <a-button @click="reset">重置</a-button>
+      <a-col :xs="24" :sm="24" :md="18" :lg="19" :xl="19" :xxl="20" class="h-full ov-hidden">
+        <GiTable
+          row-key="id"
+          :data="dataList"
+          :columns="columns"
+          :loading="loading"
+          :scroll="{ x: '100%', y: '100%', minWidth: 1500 }"
+          :pagination="pagination"
+          :disabled-tools="['size']"
+          :disabled-column-keys="['username']"
+          @refresh="search"
+        >
+          <template #top>
+            <GiForm v-model="queryForm" :options="options" :columns="queryFormColumns" @search="search" @reset="reset"></GiForm>
           </template>
-          <template #custom-right>
+          <template #toolbar-left>
             <a-button v-permission="['system:user:add']" type="primary" @click="onAdd">
-              <template #icon>
-                <icon-plus />
-              </template>
-              <span>新增</span>
+              <template #icon><icon-plus /></template>
+              <template #default>新增</template>
             </a-button>
             <a-button v-permission="['system:user:import']" @click="onImport">
-              <template #icon>
-                <icon-upload />
-              </template>
-              <span>导入</span>
+              <template #icon><icon-upload /></template>
+              <template #default>导入</template>
             </a-button>
-            <a-tooltip content="导出">
-              <a-button v-permission="['system:user:export']" class="gi_hover_btn-border" @click="onExport">
-                <template #icon>
-                  <icon-download />
-                </template>
-              </a-button>
-            </a-tooltip>
+          </template>
+          <template #toolbar-right>
+            <a-button v-permission="['system:user:export']" @click="onExport">
+              <template #icon><icon-download /></template>
+              <template #default>导出</template>
+            </a-button>
           </template>
           <template #username="{ record }">
             <GiCellAvatar :avatar="getAvatar(record.avatar, record.gender)" :name="record.username" is-link
@@ -66,13 +60,21 @@
           <template #action="{ record }">
             <a-space>
               <a-link v-permission="['system:user:update']" @click="onUpdate(record)">修改</a-link>
-              <a-link v-permission="['system:user:delete']" status="danger"
-                      :title="record.isSystem ? '系统内置数据不能删除' : '删除'" :disabled="record.disabled"
-                      @click="onDelete(record)">
+              <a-link
+                v-permission="['system:user:delete']"
+                status="danger"
+                :title="record.isSystem ? '系统内置数据不能删除' : '删除'"
+                :disabled="record.disabled"
+                @click="onDelete(record)"
+              >
                 删除
               </a-link>
               <a-dropdown>
-                <a-link v-if="has.hasPermOr(['system:user:resetPwd'])" type="text">更多</a-link>
+                <a-button v-if="has.hasPermOr(['system:user:resetPwd'])" type="text" size="mini">
+                  <template #icon>
+                    <icon-more :size="16" />
+                  </template>
+                </a-button>
                 <template #content>
                   <a-doption v-permission="['system:user:resetPwd']" @click="onResetPwd(record)">重置密码</a-doption>
                 </template>
@@ -97,6 +99,7 @@ import UserImportDrawer from './UserImportDrawer.vue'
 import UserDetailDrawer from './UserDetailDrawer.vue'
 import UserResetPwdModal from './UserResetPwdModal.vue'
 import { type UserQuery, type UserResp, deleteUser, exportUser, listUser } from '@/apis/system'
+import type { Columns, Options } from '@/components/GiForm'
 import type { TableInstanceColumns } from '@/components/GiTable/type'
 import { useDownload, useTable } from '@/hooks'
 import { isMobile } from '@/utils'
@@ -109,7 +112,6 @@ defineOptions({ name: 'SystemUser' })
 const queryForm = reactive<UserQuery>({
   sort: ['t1.createTime,desc']
 })
-
 const {
   tableData: dataList,
   loading,
@@ -117,6 +119,47 @@ const {
   search,
   handleDelete
 } = useTable((page) => listUser({ ...queryForm, ...page }), { immediate: false })
+
+const options: Options = reactive({
+  form: { layout: 'inline' },
+  col: { xs: 24, sm: 24, md: 5, lg: 4, xl: 4, xxl: 4 },
+  btns: { col: { xs: 24, sm: 24, md: 7, lg: 8, xl: 6, xxl: 6 } },
+  fold: { enable: true, index: 1, defaultCollapsed: true }
+})
+
+const queryFormColumns: Columns = reactive([
+  {
+    type: 'input',
+    field: 'description',
+    item: {
+      hideLabel: true
+    },
+    props: {
+      placeholder: '用户名/昵称/描述',
+      allowClear: true
+    }
+  },
+  {
+    type: 'select',
+    field: 'status',
+    options: DisEnableStatusList,
+    item: {
+      hideLabel: true
+    },
+    props: {
+      placeholder: '请选择状态',
+      allowClear: true
+    }
+  },
+  {
+    type: 'range-picker',
+    field: 'createTime',
+    item: {
+      hideLabel: true
+    },
+    col: { xs: 24, sm: 24, md: 10, lg: 9.5, xl: 9, xxl: 8 }
+  }
+])
 
 const columns: TableInstanceColumns[] = [
   {
@@ -151,7 +194,7 @@ const columns: TableInstanceColumns[] = [
   {
     title: '操作',
     slotName: 'action',
-    width: 200,
+    width: 150,
     align: 'center',
     fixed: !isMobile() ? 'right' : undefined,
     show: has.hasPermOr(['system:user:update', 'system:user:delete', 'system:user:resetPwd'])
@@ -162,6 +205,7 @@ const columns: TableInstanceColumns[] = [
 const reset = () => {
   queryForm.description = undefined
   queryForm.status = undefined
+  queryForm.createTime = []
   search()
 }
 

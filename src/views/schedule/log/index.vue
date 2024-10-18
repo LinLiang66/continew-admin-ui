@@ -11,7 +11,7 @@
       :disabled-tools="['size']"
       @refresh="search"
     >
-      <template #custom-left>
+      <template #toolbar-left>
         <a-select
           v-model="queryForm.groupName"
           placeholder="请选择任务组"
@@ -29,7 +29,10 @@
           @change="search"
         />
         <DateRangePicker v-model="queryForm.datetimeRange" :allow-clear="false" @change="search" />
-        <a-button @click="reset">重置</a-button>
+        <a-button @click="reset">
+          <template #icon><icon-refresh /></template>
+          <template #default>重置</template>
+        </a-button>
       </template>
       <template #taskBatchStatus="{ record }">
         <GiCellTag :value="record.taskBatchStatus" :dict="job_execute_status_enum" />

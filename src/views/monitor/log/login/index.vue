@@ -10,7 +10,7 @@
     @filter-change="filterChange"
     @refresh="search"
   >
-    <template #custom-left>
+    <template #toolbar-left>
       <a-input v-model="queryForm.createUserString" placeholder="请输入登录用户" allow-clear @change="search">
         <template #prefix><icon-search /></template>
       </a-input>
@@ -18,16 +18,16 @@
         <template #prefix><icon-search /></template>
       </a-input>
       <DateRangePicker v-model="queryForm.createTime" @change="search" />
-      <a-button @click="reset">重置</a-button>
+      <a-button @click="reset">
+        <template #icon><icon-refresh /></template>
+        <template #default>重置</template>
+      </a-button>
     </template>
-    <template #custom-right>
-      <a-tooltip content="导出">
-        <a-button v-permission="['monitor:log:export']" class="gi_hover_btn-border" @click="onExport">
-          <template #icon>
-            <icon-download />
-          </template>
-        </a-button>
-      </a-tooltip>
+    <template #toolbar-right>
+      <a-button v-permission="['monitor:log:export']" @click="onExport">
+        <template #icon><icon-download /></template>
+        <template #default>导出</template>
+      </a-button>
     </template>
     <template #status="{ record }">
       <a-tag v-if="record.status === 1" color="green">
