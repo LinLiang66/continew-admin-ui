@@ -8,7 +8,7 @@
 defineOptions({ name: 'GiOption' })
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .gi-option {
   width: 100%;
   min-width: 120px;

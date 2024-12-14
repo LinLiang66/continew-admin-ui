@@ -16,7 +16,7 @@ const baseColorObj = {
   blue: '#3491fa',
   purple: '#722ed1',
   pink: '#f5319d',
-  gray: '#86909c'
+  gray: '#86909c',
 }
 
 type BaseColor = keyof typeof baseColorObj
@@ -26,24 +26,24 @@ export default defineComponent({
   props: {
     type: {
       type: String as PropType<PropsType>,
-      default: 'light'
+      default: 'light',
     },
     status: {
       type: String as PropType<PropsStatus>,
-      default: 'primary'
+      default: 'primary',
     },
     color: {
       type: String as PropType<BaseColor | string>,
-      default: ''
+      default: '',
     },
     size: {
       type: String as PropType<PropsSize>,
-      default: 'small'
+      default: 'small',
     },
     closable: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   emits: ['click', 'close'],
   setup(props, { slots, emit }) {
@@ -125,5 +125,5 @@ export default defineComponent({
         {props.closable && CloseIcon}
       </span>
     )
-  }
+  },
 })

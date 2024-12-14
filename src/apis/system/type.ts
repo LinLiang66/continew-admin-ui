@@ -40,10 +40,10 @@ export interface UserQuery {
   createTime?: Array<string>
   deptId?: string
   sort: Array<string>
+  userIds?: Array<string>
 }
 
-export interface UserPageQuery extends UserQuery, PageQuery {
-}
+export interface UserPageQuery extends UserQuery, PageQuery {}
 
 /** 系统角色类型 */
 export interface RoleResp {
@@ -61,23 +61,11 @@ export interface RoleResp {
   disabled: boolean
 }
 
-export interface RoleDetailResp {
-  id: string
-  name: string
-  code: string
-  sort: number
-  description: string
+export type RoleDetailResp = RoleResp & {
   menuIds: Array<number>
-  dataScope: number
   deptIds: Array<number>
-  isSystem: boolean
   menuCheckStrictly: boolean
   deptCheckStrictly: boolean
-  createUserString: string
-  createTime: string
-  updateUserString: string
-  updateTime: string
-  disabled: boolean
 }
 
 export interface RoleQuery {
@@ -85,8 +73,7 @@ export interface RoleQuery {
   sort: Array<string>
 }
 
-export interface RolePageQuery extends RoleQuery, PageQuery {
-}
+export interface RolePageQuery extends RoleQuery, PageQuery {}
 
 /** 系统菜单类型 */
 export interface MenuResp {
@@ -156,7 +143,7 @@ export interface DictQuery {
   sort: Array<string>
 }
 
-export type DictItemResp = {
+export interface DictItemResp {
   id: string
   label: string
   value: string
@@ -183,17 +170,19 @@ export interface DictItemPageQuery extends DictItemQuery, PageQuery {
 
 /** 系统公告类型 */
 export interface NoticeResp {
-  id: string
-  title: string
+  id?: string
+  title?: string
   content: string
-  status: number
-  type: string
-  effectiveTime: string
-  terminateTime: string
-  createUserString: string
-  createTime: string
-  updateUserString: string
-  updateTime: string
+  status?: number
+  type?: string
+  effectiveTime?: string
+  terminateTime?: string
+  noticeScope?: number
+  noticeUsers?: Array<string>
+  createUserString?: string
+  createTime?: string
+  updateUserString?: string
+  updateTime?: string
 }
 
 export interface NoticeQuery {
@@ -206,7 +195,7 @@ export interface NoticePageQuery extends NoticeQuery, PageQuery {
 }
 
 /** 系统文件类型 */
-export type FileItem = {
+export interface FileItem {
   id: string
   name: string
   size: number
@@ -242,7 +231,7 @@ export interface FilePageQuery extends FileQuery, PageQuery {
 }
 
 /** 系统存储类型 */
-export type StorageResp = {
+export interface StorageResp {
   id: string
   name: string
   code: string
@@ -304,6 +293,18 @@ export interface SiteConfig {
   SITE_BEIAN: OptionResp
 }
 
+/** 安全配置类型 */
+export interface SecurityConfig {
+  PASSWORD_ERROR_LOCK_COUNT: OptionResp
+  PASSWORD_ERROR_LOCK_MINUTES: OptionResp
+  PASSWORD_EXPIRATION_DAYS: OptionResp
+  PASSWORD_EXPIRATION_WARNING_DAYS: OptionResp
+  PASSWORD_REPETITION_TIMES: OptionResp
+  PASSWORD_MIN_LENGTH: OptionResp
+  PASSWORD_ALLOW_CONTAIN_USERNAME: OptionResp
+  PASSWORD_REQUIRE_SYMBOLS: OptionResp
+}
+
 /** 邮箱配置类型 */
 export interface MailConfig {
   MAIL_PROTOCOL: OptionResp
@@ -315,16 +316,9 @@ export interface MailConfig {
   MAIL_SSL_PORT: OptionResp
 }
 
-/** 安全配置类型 */
-export interface SecurityConfig {
-  PASSWORD_ERROR_LOCK_COUNT: OptionResp
-  PASSWORD_ERROR_LOCK_MINUTES: OptionResp
-  PASSWORD_EXPIRATION_DAYS: OptionResp
-  PASSWORD_EXPIRATION_WARNING_DAYS: OptionResp
-  PASSWORD_REPETITION_TIMES: OptionResp
-  PASSWORD_MIN_LENGTH: OptionResp
-  PASSWORD_ALLOW_CONTAIN_USERNAME: OptionResp
-  PASSWORD_REQUIRE_SYMBOLS: OptionResp
+/** 登录配置类型 */
+export interface LoginConfig {
+  LOGIN_CAPTCHA_ENABLED: OptionResp
 }
 
 /** 绑定三方账号信息 */

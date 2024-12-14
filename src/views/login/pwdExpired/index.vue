@@ -1,65 +1,65 @@
 <template>
-    <div class="login pc">
-        <h3 class="login-logo">
-            <img v-if="logo" :src="logo" alt="logo" />
-            <img v-else src="/logo.svg" alt="logo" />
-            <span>{{ title }}</span>
-        </h3>
+  <div class="login pc">
+    <h3 class="login-logo">
+      <img v-if="logo" :src="logo" alt="logo" />
+      <img v-else src="/logo.svg" alt="logo" />
+      <span>{{ title }}</span>
+    </h3>
 
-        <a-row align="stretch" class="login-box">
-            <a-col :xs="0" :sm="12" :md="13">
-                <div class="login-left">
-                    <img class="login-left__img" src="@/assets/images/banner.png" alt="banner" />
-                </div>
-            </a-col>
-            <a-col :xs="24" :sm="12" :md="11">
-                <div class="login-right">
-                    <a-tabs class="login-right__form">
-                        <template #extra>
-                            <span style="color: red;">密码已过期，请修改密码</span>
-                        </template>
-                        <a-tab-pane key="1" title="密码修改">
-                            <span></span>
-                            <ModifyPassword />
-                        </a-tab-pane>
-                    </a-tabs>
-                </div>
-            </a-col>
-        </a-row>
+    <a-row align="stretch" class="login-box">
+      <a-col :xs="0" :sm="12" :md="13">
+        <div class="login-left">
+          <img class="login-left__img" src="@/assets/images/banner.png" alt="banner" />
+        </div>
+      </a-col>
+      <a-col :xs="24" :sm="12" :md="11">
+        <div class="login-right">
+          <a-tabs class="login-right__form">
+            <template #extra>
+              <span style="color: red;">密码已过期，请修改密码</span>
+            </template>
+            <a-tab-pane key="1" title="密码修改">
+              <span></span>
+              <ModifyPassword />
+            </a-tab-pane>
+          </a-tabs>
+        </div>
+      </a-col>
+    </a-row>
 
-        <div v-if="isDesktop" class="footer">
-            <div class="beian">
-                <div class="below text">
-                    {{ appStore.getCopyright() }}{{ appStore.getForRecord() ? ` ·
+    <div v-if="isDesktop" class="footer">
+      <div class="beian">
+        <div class="below text">
+          {{ appStore.getCopyright() }}{{ appStore.getForRecord() ? ` ·
                     ${appStore.getForRecord()}` : '' }}
-                </div>
-            </div>
         </div>
+      </div>
+    </div>
 
-        <GiThemeBtn class="theme-btn" />
-        <Background />
+    <GiThemeBtn class="theme-btn" />
+    <Background />
+  </div>
+  <div class="login h5">
+    <div class="login-logo">
+      <img v-if="logo" :src="logo" alt="logo" />
+      <img v-else src="/logo.svg" alt="logo" />
+      <span>{{ title }}</span>
     </div>
-    <div class="login h5">
-        <div class="login-logo">
-            <img v-if="logo" :src="logo" alt="logo" />
-            <img v-else src="/logo.svg" alt="logo" />
-            <span>{{ title }}</span>
+    <a-row align="stretch" class="login-box">
+      <a-col :xs="24" :sm="12" :md="11">
+        <div class="login-right">
+          <a-tabs class="login-right__form">
+            <template #extra>
+              <span style="color: red;">密码已过期，请修改密码</span>
+            </template>
+            <a-tab-pane key="1" title="密码修改">
+              <ModifyPassword />
+            </a-tab-pane>
+          </a-tabs>
         </div>
-        <a-row align="stretch" class="login-box">
-            <a-col :xs="24" :sm="12" :md="11">
-                <div class="login-right">
-                    <a-tabs class="login-right__form">
-                        <template #extra>
-                            <span style="color: red;">密码已过期，请修改密码</span>
-                        </template>
-                        <a-tab-pane key="1" title="密码修改">
-                            <ModifyPassword />
-                        </a-tab-pane>
-                    </a-tabs>
-                </div>
-            </a-col>
-        </a-row>
-    </div>
+      </a-col>
+    </a-row>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -76,7 +76,7 @@ const title = computed(() => appStore.getTitle())
 const logo = computed(() => appStore.getLogo())
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 @media screen and (max-width: 570px) {
     .pc {
         display: none !important;

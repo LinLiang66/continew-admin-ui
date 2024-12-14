@@ -1333,6 +1333,6 @@
   </svg>
 </template>
 
-<script lang="ts" setup></script>
+<script setup lang="ts"></script>
 
-<style lang="scss" scoped></style>
+<style scoped lang="scss"></style>

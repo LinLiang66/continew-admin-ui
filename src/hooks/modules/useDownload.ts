@@ -10,7 +10,7 @@ import { Message, Notification } from '@arco-design/web-vue'
 interface NavigatorWithMsSaveOrOpenBlob extends Navigator {
   msSaveOrOpenBlob: (blob: Blob, fileName: string) => void
 }
-export const useDownload = async (api: () => Promise<any>, isNotify = true, tempName = '', fileType = '.xlsx') => {
+export const useDownload = async (api: () => Promise<any>, isNotify = false, tempName = '', fileType = '.xlsx') => {
   try {
     const res = await api()
     if (res.headers['content-disposition']) {
@@ -21,7 +21,7 @@ export const useDownload = async (api: () => Promise<any>, isNotify = true, temp
     if (isNotify && !res?.code) {
       Notification.warning({
         title: '温馨提示',
-        content: '如果数据庞大会导致下载缓慢哦，请您耐心等待！'
+        content: '如果数据庞大会导致下载缓慢哦，请您耐心等待！',
       })
     }
     if (res.status !== 200 || res.data == null || !(res.data instanceof Blob)) {

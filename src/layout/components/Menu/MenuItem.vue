@@ -3,8 +3,8 @@
     <a-menu-item
       v-if="
         isOneShowingChild
-        && (!onlyOneChild?.children || onlyOneChild?.meta?.noShowingChildren)
-        && !item?.meta?.alwaysShow
+          && (!onlyOneChild?.children || onlyOneChild?.meta?.noShowingChildren)
+          && !item?.meta?.alwaysShow
       "
       v-bind="attrs"
       :key="onlyOneChild?.path"
@@ -27,7 +27,7 @@
   </template>
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import type { RouteRecordRaw } from 'vue-router'
 import MenuIcon from './MenuIcon.vue'
 

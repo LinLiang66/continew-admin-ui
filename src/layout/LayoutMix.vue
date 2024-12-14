@@ -1,7 +1,9 @@
 <template>
   <div class="layout-mix">
-    <section v-if="isDesktop" class="layout-mix-left" :class="{ 'app-menu-dark': appStore.menuDark }"
-      :style="appStore.menuDark ? appStore.themeCSSVar : undefined">
+    <section
+      v-if="isDesktop" class="layout-mix-left" :class="{ 'app-menu-dark': appStore.menuDark }"
+      :style="appStore.menuDark ? appStore.themeCSSVar : undefined"
+    >
       <Logo :collapsed="appStore.menuCollapse"></Logo>
       <Menu :menus="leftMenus" :menu-style="{ width: '220px', flex: 1 }"></Menu>
     </section>
@@ -9,8 +11,10 @@
     <section class="layout-mix-right">
       <header class="header">
         <MenuFoldBtn></MenuFoldBtn>
-        <a-menu v-if="isDesktop" mode="horizontal" :selected-keys="activeMenu" :auto-open-selected="false"
-          :trigger-props="{ animationName: 'slide-dynamic-origin' }" @menu-item-click="onMenuItemClick">
+        <a-menu
+          v-if="isDesktop" mode="horizontal" :selected-keys="activeMenu" :auto-open-selected="false"
+          :trigger-props="{ animationName: 'slide-dynamic-origin' }" @menu-item-click="onMenuItemClick"
+        >
           <a-menu-item v-for="item in topMenus" :key="item.path">
             <template #icon>
               <GiSvgIcon :name="getMenuIcon(item)" :size="24" />
@@ -94,11 +98,11 @@ watch(
       getLeftMenus(newPath)
     })
   },
-  { immediate: true }
+  { immediate: true },
 )
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 :deep(.arco-menu-pop) {
   white-space: nowrap;
 }

@@ -3,7 +3,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { type FormInstance, Message, Modal } from '@arco-design/web-vue'
 import { isEqual } from 'lodash-es'
 
-type Option<T> = {
+interface Option<T> {
   key?: string
   formRef?: Ref<FormInstance>
   initApi: () => Promise<ApiRes<T>>
@@ -49,7 +49,7 @@ export function useFormCurd<T = any>(option: Option<T>) {
     () => route.query,
     () => {
       initForm()
-    }
+    },
   )
 
   watch(
@@ -61,7 +61,7 @@ export function useFormCurd<T = any>(option: Option<T>) {
         isChanged.value = true
       }
     },
-    { immediate: true, deep: true }
+    { immediate: true, deep: true },
   )
 
   const save = async () => {
@@ -92,7 +92,7 @@ export function useFormCurd<T = any>(option: Option<T>) {
         hideCancel: false,
         onOk: () => {
           router.back()
-        }
+        },
       })
     } else {
       router.back()

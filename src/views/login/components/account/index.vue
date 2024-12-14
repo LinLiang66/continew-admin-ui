@@ -1,13 +1,20 @@
 <template>
-  <a-form ref="formRef" :model="form" :rules="rules" :label-col-style="{ display: 'none' }"
-    :wrapper-col-style="{ flex: 1 }" size="large" @submit="handleLogin">
+  <a-form
+    ref="formRef"
+    :model="form"
+    :rules="rules"
+    :label-col-style="{ display: 'none' }"
+    :wrapper-col-style="{ flex: 1 }"
+    size="large"
+    @submit="handleLogin"
+  >
     <a-form-item field="username" hide-label>
       <a-input v-model="form.username" placeholder="请输入用户名" allow-clear />
     </a-form-item>
     <a-form-item field="password" hide-label>
       <a-input-password v-model="form.password" placeholder="请输入密码" />
     </a-form-item>
-    <a-form-item field="captcha" hide-label>
+    <a-form-item v-if="isCaptchaEnabled" field="captcha" hide-label>
       <a-input v-model="form.captcha" placeholder="请输入验证码" :max-length="4" allow-clear style="flex: 1 1" />
       <div class="captcha-container" @click="getCaptcha">
         <img :src="captchaImgBase64" alt="验证码" class="captcha" />
@@ -40,10 +47,14 @@ import { encryptByRsa } from '@/utils/encrypt'
 const loginConfig = useStorage('login-config', {
   rememberMe: true,
   username: 'admin', // 演示默认值
-  password: 'admin123' // 演示默认值
+  password: 'admin123', // 演示默认值
   // username: debug ? 'admin' : '', // 演示默认值
   // password: debug ? 'admin123' : '', // 演示默认值
 })
+// 是否启用验证码
+const isCaptchaEnabled = ref(true)
+// 验证码图片
+const captchaImgBase64 = ref()
 
 const formRef = ref<FormInstance>()
 const form = reactive({
@@ -51,21 +62,21 @@ const form = reactive({
   password: loginConfig.value.password,
   captcha: '',
   uuid: '',
-  expired: false
+  expired: false,
 })
 const rules: FormInstance['rules'] = {
   username: [{ required: true, message: '请输入用户名' }],
   password: [{ required: true, message: '请输入密码' }],
-  captcha: [{ required: true, message: '请输入验证码' }]
+  captcha: [{ required: isCaptchaEnabled.value, message: '请输入验证码' }],
 }
 
 // 验证码过期定时器
 let timer
-const startTimer = (expireTime: number) => {
+const startTimer = (expireTime: number, curTime = Date.now()) => {
   if (timer) {
     clearTimeout(timer)
   }
-  const remainingTime = expireTime - Date.now()
+  const remainingTime = expireTime - curTime
   if (remainingTime <= 0) {
     form.expired = true
     return
@@ -81,15 +92,15 @@ onBeforeUnmount(() => {
   }
 })
 
-const captchaImgBase64 = ref()
 // 获取验证码
 const getCaptcha = () => {
   getImageCaptcha().then((res) => {
-    const { uuid, img, expireTime } = res.data
-    form.uuid = uuid
+    const { uuid, img, expireTime, isEnabled } = res.data
+    isCaptchaEnabled.value = isEnabled
     captchaImgBase64.value = img
+    form.uuid = uuid
     form.expired = false
-    startTimer(expireTime)
+    startTimer(expireTime, Number(res.timestamp))
   })
 }
 
@@ -107,15 +118,15 @@ const handleLogin = async () => {
       username: form.username,
       password: encryptByRsa(form.password) || '',
       captcha: form.captcha,
-      uuid: form.uuid
+      uuid: form.uuid,
     })
     tabsStore.reset()
     const { redirect, ...othersQuery } = router.currentRoute.value.query
-    router.push({
+    await router.push({
       path: (redirect as string) || '/',
       query: {
-        ...othersQuery
-      }
+        ...othersQuery,
+      },
     })
     const { rememberMe } = loginConfig.value
     loginConfig.value.username = rememberMe ? form.username : ''
@@ -133,7 +144,7 @@ onMounted(() => {
 })
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .arco-input-wrapper,
 :deep(.arco-select-view-single) {
   height: 40px;
@@ -174,11 +185,6 @@ onMounted(() => {
   position: relative;
   display: inline-block;
   cursor: pointer;
-}
-
-.captcha-container {
-  position: relative;
-  display: inline-block;
 }
 
 .overlay {

@@ -30,8 +30,8 @@ const handleSocialLogin = () => {
       router.push({
         path: (redirect as string) || '/',
         query: {
-          ...othersQuery
-        }
+          ...othersQuery,
+        },
       })
       Message.success('欢迎使用')
     })
@@ -39,8 +39,8 @@ const handleSocialLogin = () => {
       router.push({
         name: 'Login',
         query: {
-          ...othersQuery
-        }
+          ...othersQuery,
+        },
       })
     })
     .finally(() => {
@@ -58,8 +58,8 @@ const handleBindSocial = () => {
       router.push({
         path: '/setting/profile',
         query: {
-          ...othersQuery
-        }
+          ...othersQuery,
+        },
       })
       Message.success('绑定成功')
     })
@@ -67,8 +67,8 @@ const handleBindSocial = () => {
       router.push({
         path: '/setting/profile',
         query: {
-          ...othersQuery
-        }
+          ...othersQuery,
+        },
       })
     })
     .finally(() => {

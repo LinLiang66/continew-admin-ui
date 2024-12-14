@@ -16,4 +16,4 @@ defineOptions({ name: 'ParentView' })
 const tabsStore = useTabsStore()
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped lang="scss"></style>

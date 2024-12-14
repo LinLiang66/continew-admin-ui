@@ -36,14 +36,16 @@
         </a-button>
       </template>
       <template #toolbar-right>
-        <a-button type="primary" status="danger" :disabled="!selectedKeys.length" @click="onDelete">
+        <a-button type="primary" status="danger" :disabled="!selectedKeys.length" :title="!selectedKeys.length ? '请选择' : ''" @click="onDelete">
           <template #icon><icon-delete /></template>
-          <span>删除</span>
+          <template #default>删除</template>
         </a-button>
-        <a-button type="primary" :disabled="!selectedKeys.length" @click="onRead">
-          <span>标记为已读</span>
+        <a-button type="primary" :disabled="!selectedKeys.length" :title="!selectedKeys.length ? '请选择' : ''" @click="onRead">
+          <template #default>标记为已读</template>
         </a-button>
-        <a-button type="primary" :disabled="selectedKeys.length" @click="onReadAll">全部已读</a-button>
+        <a-button type="primary" :disabled="selectedKeys.length" :title="!selectedKeys.length ? '请选择' : ''" @click="onReadAll">
+          <template #default>全部已读</template>
+        </a-button>
       </template>
       <template #title="{ record }">
         <a-tooltip :content="record.content"><span>{{ record.title }}</span></a-tooltip>
@@ -72,7 +74,7 @@ defineOptions({ name: 'SystemMessage' })
 const { message_type } = useDict('message_type')
 
 const queryForm = reactive<MessageQuery>({
-  sort: ['createTime,desc']
+  sort: ['createTime,desc'],
 })
 
 const {
@@ -83,7 +85,7 @@ const {
   select,
   selectAll,
   search,
-  handleDelete
+  handleDelete,
 } = useTable((page) => listMessage({ ...queryForm, ...page }), { immediate: true })
 
 const columns: TableInstanceColumns[] = [
@@ -91,12 +93,12 @@ const columns: TableInstanceColumns[] = [
     title: '序号',
     width: 66,
     align: 'center',
-    render: ({ rowIndex }) => h('span', {}, rowIndex + 1 + (pagination.current - 1) * pagination.pageSize)
+    render: ({ rowIndex }) => h('span', {}, rowIndex + 1 + (pagination.current - 1) * pagination.pageSize),
   },
-  { title: '标题', dataIndex: 'title', slotName: 'title', ellipsis: true, tooltip: true },
-  { title: '状态', dataIndex: 'isRead', slotName: 'isRead', align: 'center', width: 80 },
+  { title: '标题', dataIndex: 'title', slotName: 'title', minWidth: 100, ellipsis: true, tooltip: true },
+  { title: '状态', dataIndex: 'isRead', slotName: 'isRead', align: 'center' },
   { title: '时间', dataIndex: 'createTime', width: 180 },
-  { title: '类型', dataIndex: 'type', slotName: 'type', width: 180, ellipsis: true, tooltip: true }
+  { title: '类型', dataIndex: 'type', slotName: 'type', width: 180, ellipsis: true, tooltip: true },
 ]
 
 // 重置
@@ -136,9 +138,9 @@ const onReadAll = async () => {
       await readMessage([])
       Message.success('操作成功')
       search()
-    }
+    },
   })
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped lang="scss"></style>

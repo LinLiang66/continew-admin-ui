@@ -28,29 +28,30 @@
   </a-drawer>
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import { useWindowSize } from '@vueuse/core'
-import { type UserDetailResp, getUser } from '@/apis/system'
+import { type UserDetailResp, getUser as getDetail } from '@/apis/system/user'
 
 const { width } = useWindowSize()
 
 const dataId = ref('')
 const dataDetail = ref<UserDetailResp>()
+const visible = ref(false)
+
 // 查询详情
 const getDataDetail = async () => {
-  const res = await getUser(dataId.value)
-  dataDetail.value = res.data
+  const { data } = await getDetail(dataId.value)
+  dataDetail.value = data
 }
 
-const visible = ref(false)
-// 详情
-const onDetail = async (id: string) => {
+// 打开
+const onOpen = async (id: string) => {
   dataId.value = id
   await getDataDetail()
   visible.value = true
 }
 
-defineExpose({ onDetail })
+defineExpose({ onOpen })
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped lang="scss"></style>

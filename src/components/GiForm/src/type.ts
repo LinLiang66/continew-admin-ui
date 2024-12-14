@@ -1,4 +1,5 @@
 import type * as A from '@arco-design/web-vue'
+import type { VNode } from 'vue'
 
 export type FormType =
   | 'input'
@@ -69,11 +70,10 @@ export type ColumnsItemOptionsOrData =
 
 export interface ColumnsItem<F = any> {
   type?: FormType // 类型
-  label?: A.FormItemInstance['label'] // 标签
+  label?: A.FormItemInstance['label'] | (() => VNode) // 标签
   field: A.FormItemInstance['field'] // 字段(必须唯一)
-  span?: number // 栅格占位格数
-  col?: A.ColProps // a-col的props, 响应式布局, 优先级大于span
-  item?: Omit<A.FormItemInstance['$props'], 'label' | 'field'> // a-form-item的props
+  gridItemProps?: A.GridItemProps
+  formItemProps?: Omit<A.FormItemInstance['$props'], 'label' | 'field'> // a-form-item的props
   props?:
     & A.InputInstance['$props']
     & A.InputPasswordInstance['$props']
@@ -99,6 +99,7 @@ export interface ColumnsItem<F = any> {
     | A.CheckboxGroupInstance['$props']['options']
     | A.CascaderInstance['$props']['options']
   // 下拉树组件的data
+  span?: A.GridItemProps['span']
   data?: A.TreeSelectInstance['$props']['data']
   hide?: ColumnsItemHide<F> // 是否隐藏
   disabled?: ColumnsItemDisabled<F> // 是否禁用
@@ -106,13 +107,15 @@ export interface ColumnsItem<F = any> {
   resultFormat?: ColumnsItemFormat // 结果集格式化
   init?: boolean // 初始化请求
   cascader?: string[] // 级联的field字段列表
+  slots?: Partial<Record<'prepend' | 'append' | 'suffix' | 'prefix', string | (() => VNode)>>
+  formItemSlots?: Partial<Record<'help' | 'extra', string | (() => VNode)>>
 }
 
 export interface Options {
-  form: Omit<A.FormInstance['$props'], 'model'>
-  row?: Partial<typeof import('@arco-design/web-vue')['Row']['__defaults']>
-  col?: A.ColProps
-  btns?: { hide?: boolean, span?: number, col?: A.ColProps, searchBtnText?: string }
+  form?: Omit<A.FormInstance['$props'], 'model'>
+  grid?: A.GridProps
+  gridItem?: A.GridItemProps
+  btns?: { hide?: boolean, searchBtnText?: string }
   fold?: { enable?: boolean, index?: number, defaultCollapsed?: boolean }
 }
 

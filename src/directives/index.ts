@@ -6,5 +6,5 @@ export default {
   install(Vue: App) {
     Vue.directive('permission', hasPerm)
     Vue.directive('role', hasRole)
-  }
+  },
 }

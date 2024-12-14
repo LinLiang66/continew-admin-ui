@@ -18,39 +18,32 @@
 import { Message } from '@arco-design/web-vue'
 import { resetUserPwd } from '@/apis/system'
 import { type Columns, GiForm } from '@/components/GiForm'
-import { useForm } from '@/hooks'
+import { useResetReactive } from '@/hooks'
 import { encryptByRsa } from '@/utils/encrypt'
 
 const emit = defineEmits<{
   (e: 'save-success'): void
 }>()
+
 const dataId = ref('')
+const visible = ref(false)
 const formRef = ref<InstanceType<typeof GiForm>>()
 
 const options: Options = {
   form: { size: 'large' },
-  col: { xs: 24, sm: 24, md: 24, lg: 24, xl: 24, xxl: 24 },
-  btns: { hide: true }
+  btns: { hide: true },
 }
 
-const columns: Columns = reactive([
-  { label: '密码', field: 'newPassword', type: 'input-password', rules: [{ required: true, message: '请输入密码' }] }
-])
+const [form, resetForm] = useResetReactive({})
 
-const { form, resetForm } = useForm({})
+const columns: Columns = reactive([
+  { label: '密码', field: 'newPassword', type: 'input-password', rules: [{ required: true, message: '请输入密码' }] },
+])
 
 // 重置
 const reset = () => {
   formRef.value?.formRef?.resetFields()
   resetForm()
-}
-
-const visible = ref(false)
-// 重置
-const onReset = (id: string) => {
-  reset()
-  dataId.value = id
-  visible.value = true
 }
 
 // 保存
@@ -67,5 +60,14 @@ const save = async () => {
   }
 }
 
-defineExpose({ onReset })
+// 打开
+const onOpen = (id: string) => {
+  reset()
+  dataId.value = id
+  visible.value = true
+}
+
+defineExpose({ onOpen })
 </script>
+
+<style scoped lang="scss"></style>

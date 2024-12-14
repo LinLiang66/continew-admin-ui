@@ -29,7 +29,7 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import { useAppStore } from '@/stores'
 import Logo from '@/layout/components/Logo.vue'
 import Menu from '@/layout/components/Menu/index.vue'
@@ -49,7 +49,7 @@ const onClick = () => {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .menu-fold-btn {
   background-color: var(--color-secondary-hover) !important;
   flex-shrink: 0;

@@ -15,7 +15,7 @@ defineOptions({ name: 'GiSvgIcon' })
 const props = withDefaults(defineProps<Props>(), {
   name: '',
   color: '',
-  size: 20
+  size: 20,
 })
 
 interface Props {
@@ -41,7 +41,7 @@ const svgClass = computed(() => {
 })
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .svg-icon {
   width: auto;
   height: auto;

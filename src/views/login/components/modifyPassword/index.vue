@@ -1,6 +1,8 @@
 <template>
-  <a-form ref="formRef" :model="form" :rules="rules" layout="vertical" :label-col-style="{ lineHeight: '10px' }"
-    :wrapper-col-style="{ flex: 1 }" size="large" @submit="onModify">
+  <a-form
+    ref="formRef" :model="form" :rules="rules" layout="vertical" :label-col-style="{ lineHeight: '10px' }"
+    :wrapper-col-style="{ flex: 1 }" size="large" @submit="onModify"
+  >
     <a-form-item field="oldPassword" label="当前密码">
       <a-input-password v-model="form.oldPassword" placeholder="请输入当前密码" allow-clear />
     </a-form-item>
@@ -34,12 +36,12 @@ const formRef = ref<FormInstance>()
 const form = reactive<Form>({
   oldPassword: '',
   newPassword: '',
-  confirmPassword: ''
+  confirmPassword: '',
 })
 
 const rules: FormInstance['rules'] = {
   oldPassword: [
-    { required: true, message: '请输入当前密码' }
+    { required: true, message: '请输入当前密码' },
   ],
   newPassword: [{ required: true, message: '请输入新密码' }, {
     validator: (value, cd) => {
@@ -49,7 +51,7 @@ const rules: FormInstance['rules'] = {
         }
         resolve(true)
       })
-    }
+    },
   }],
   confirmPassword: [{ required: true, message: '请再次输入新密码' }, {
     validator: (value, cd) => {
@@ -59,8 +61,8 @@ const rules: FormInstance['rules'] = {
         }
         resolve(true)
       })
-    }
-  }]
+    },
+  }],
 }
 const router = useRouter()
 const loading = ref(false)
@@ -73,11 +75,11 @@ const onModify = async () => {
     loading.value = true
     const params = {
       oldPassword: encryptByRsa(form.oldPassword) || '',
-      newPassword: encryptByRsa(form.newPassword) || ''
+      newPassword: encryptByRsa(form.newPassword) || '',
     }
     await updateUserPassword(params)
     router.push({
-      path: '/login'
+      path: '/login',
     })
     Message.success('修改成功')
   } catch (error) {
@@ -88,7 +90,7 @@ const onModify = async () => {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .arco-input-wrapper,
 :deep(.arco-select-view-single) {
   height: 40px;

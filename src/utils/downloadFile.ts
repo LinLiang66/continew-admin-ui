@@ -17,7 +17,7 @@ function getFileName(url: string) {
 export function downloadByUrl({
   url,
   target = '_blank',
-  fileName
+  fileName,
 }: {
   url: string
   target?: '_self' | '_blank'

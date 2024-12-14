@@ -8,154 +8,174 @@
     @before-ok="save"
     @close="reset"
   >
-    <a-form ref="formRef" :model="form" :rules="rules" size="large" auto-label-width>
-      <a-form-item label="用户名" field="username">
-        <a-input v-model.trim="form.username" placeholder="请输入用户名" :max-length="64" show-word-limit />
-      </a-form-item>
-      <a-form-item label="昵称" field="nickname">
-        <a-input v-model.trim="form.nickname" placeholder="请输入昵称" :max-length="30" show-word-limit />
-      </a-form-item>
-      <a-form-item v-if="!isUpdate" label="密码" field="password">
-        <a-input-password v-model.trim="form.password" placeholder="请输入密码" :max-length="32" show-word-limit />
-      </a-form-item>
-      <a-form-item label="手机号码" field="phone">
-        <a-input v-model.trim="form.phone" placeholder="请输入手机号码" :max-length="11" />
-      </a-form-item>
-      <a-form-item label="邮箱" field="email">
-        <a-input v-model.trim="form.email" placeholder="请输入邮箱" :max-length="255" />
-      </a-form-item>
-      <a-form-item label="性别" field="gender">
-        <a-radio-group v-model="form.gender">
-          <a-radio :value="1">男</a-radio>
-          <a-radio :value="2">女</a-radio>
-          <a-radio :value="0" disabled>未知</a-radio>
-        </a-radio-group>
-      </a-form-item>
-      <a-form-item label="所属部门" field="deptId">
-        <a-tree-select
-          v-model="form.deptId"
-          :data="deptList"
-          placeholder="请选择所属部门"
-          allow-clear
-          allow-search
-          :filter-tree-node="filterDeptOptions"
-        />
-      </a-form-item>
-      <a-form-item label="角色" field="roleIds">
-        <a-select
-          v-model="form.roleIds"
-          :options="roleList"
-          placeholder="请选择角色"
-          multiple
-          allow-clear
-          :allow-search="{ retainInputValue: true }"
-        />
-      </a-form-item>
-      <a-form-item label="描述" field="description">
-        <a-textarea
-          v-model.trim="form.description"
-          placeholder="请输入描述"
-          show-word-limit
-          :max-length="200"
-          :auto-size="{ minRows: 3, maxRows: 5 }"
-        />
-      </a-form-item>
-      <a-form-item label="状态" field="status">
-        <a-switch
-          v-model="form.status"
-          :disabled="form.isSystem"
-          :checked-value="1"
-          :unchecked-value="2"
-          checked-text="启用"
-          unchecked-text="禁用"
-          type="round"
-        />
-      </a-form-item>
-    </a-form>
+    <GiForm ref="formRef" v-model="form" :options="options" :columns="columns" />
   </a-drawer>
 </template>
 
 <script setup lang="ts">
-import { type FormInstance, Message, type TreeNodeData } from '@arco-design/web-vue'
+import { Message, type TreeNodeData } from '@arco-design/web-vue'
 import { useWindowSize } from '@vueuse/core'
-import { addUser, getUser, updateUser } from '@/apis/system'
+import { addUser, getUser, updateUser } from '@/apis/system/user'
+import { type Columns, GiForm, type Options } from '@/components/GiForm'
 import type { Gender, Status } from '@/types/global'
-import { useForm } from '@/hooks'
+import { GenderList } from '@/constant/common'
+import { useResetReactive } from '@/hooks'
 import { useDept, useRole } from '@/hooks/app'
 import { encryptByRsa } from '@/utils/encrypt'
 
 const emit = defineEmits<{
   (e: 'save-success'): void
 }>()
+
 const { width } = useWindowSize()
-const { roleList, getRoleList } = useRole()
-const { deptList, getDeptList } = useDept()
-// 过滤部门
-const filterDeptOptions = (searchKey: string, nodeData: TreeNodeData) => {
-  if (nodeData.title) {
-    return nodeData.title.toLowerCase().includes(searchKey.toLowerCase())
-  }
-  return false
-}
 
 const dataId = ref('')
+const visible = ref(false)
 const isUpdate = computed(() => !!dataId.value)
 const title = computed(() => (isUpdate.value ? '修改用户' : '新增用户'))
-const formRef = ref<FormInstance>()
+const formRef = ref<InstanceType<typeof GiForm>>()
+const { roleList, getRoleList } = useRole()
+const { deptList, getDeptList } = useDept()
 
-const rules: FormInstance['rules'] = {
-  username: [{ required: true, message: '请输入用户名' }],
-  nickname: [{ required: true, message: '请输入昵称' }],
-  password: [{ required: true, message: '请输入密码' }],
-  deptId: [{ required: true, message: '请选择所属部门' }],
-  roleIds: [{ required: true, message: '请选择角色' }]
+const options: Options = {
+  form: { size: 'large' },
+  btns: { hide: true },
 }
 
-const { form, resetForm } = useForm({
+const [form, resetForm] = useResetReactive({
   gender: 1 as Gender,
-  status: 1 as Status
+  status: 1 as Status,
 })
+
+const columns: Columns = reactive([
+  {
+    label: '用户名',
+    field: 'username',
+    type: 'input',
+    props: {
+      placeholder: '请输入用户名',
+      maxLength: 64,
+      showWordLimit: true,
+    },
+    rules: [{ required: true, message: '请输入用户名' }],
+  },
+  {
+    label: '昵称',
+    field: 'nickname',
+    type: 'input',
+    props: {
+      placeholder: '请输入昵称',
+      maxLength: 30,
+      showWordLimit: true,
+    },
+    rules: [{ required: true, message: '请输入昵称' }],
+  },
+  {
+    label: '密码',
+    field: 'password',
+    type: 'input-password',
+    props: {
+      placeholder: '请输入密码',
+      maxLength: 32,
+      showWordLimit: true,
+    },
+    rules: [{ required: true, message: '请输入密码' }],
+    hide: () => {
+      return isUpdate.value
+    },
+  },
+  {
+    label: '手机号码',
+    field: 'phone',
+    type: 'input',
+    props: {
+      placeholder: '请输入手机号码',
+      maxLength: 11,
+    },
+  },
+  {
+    label: '邮箱',
+    field: 'email',
+    type: 'input',
+    props: {
+      placeholder: '请输入邮箱',
+      maxLength: 255,
+    },
+  },
+  {
+    label: '性别',
+    field: 'gender',
+    type: 'radio-group',
+    options: GenderList,
+  },
+  {
+    label: '所属部门',
+    field: 'deptId',
+    type: 'tree-select',
+    data: deptList,
+    props: {
+      placeholder: '请选择所属部门',
+      allowClear: true,
+      allowSearch: true,
+      fallbackOption: false,
+      filterTreeNode(searchKey: string, nodeData: TreeNodeData) {
+        if (nodeData.title) {
+          return nodeData.title.toLowerCase().includes(searchKey.toLowerCase())
+        }
+        return false
+      },
+    },
+    rules: [{ required: true, message: '请选择所属部门' }],
+  },
+  {
+    label: '角色',
+    field: 'roleIds',
+    type: 'select',
+    options: roleList,
+    props: {
+      placeholder: '请选择角色',
+      multiple: true,
+      allowClear: true,
+      allowSearch: true,
+    },
+    rules: [{ required: true, message: '请选择角色' }],
+  },
+  {
+    label: '描述',
+    field: 'description',
+    type: 'textarea',
+    props: {
+      placeholder: '请输入描述',
+      maxLength: 200,
+      showWordLimit: true,
+      autoSize: { minRows: 3, maxRows: 5 },
+    },
+  },
+  {
+    label: '状态',
+    field: 'status',
+    type: 'switch',
+    props: {
+      type: 'round',
+      checkedValue: 1,
+      uncheckedValue: 2,
+      checkedText: '启用',
+      uncheckedText: '禁用',
+    },
+  },
+])
 
 // 重置
 const reset = () => {
-  formRef.value?.resetFields()
+  formRef.value?.formRef?.resetFields()
   resetForm()
-}
-
-const visible = ref(false)
-// 新增
-const onAdd = () => {
-  if (!deptList.value.length) {
-    getDeptList()
-  }
-  if (!roleList.value.length) {
-    getRoleList()
-  }
-  reset()
-  dataId.value = ''
-  visible.value = true
-}
-
-// 修改
-const onUpdate = async (id: string) => {
-  if (!deptList.value.length) {
-    await getDeptList()
-  }
-  if (!roleList.value.length) {
-    await getRoleList()
-  }
-  reset()
-  dataId.value = id
-  const res = await getUser(id)
-  Object.assign(form, res.data)
-  visible.value = true
 }
 
 // 保存
 const save = async () => {
   const rawPassword = form.password
   try {
-    const isInvalid = await formRef.value?.validate()
+    const isInvalid = await formRef.value?.formRef?.validate()
     if (isInvalid) return false
     if (isUpdate.value) {
       await updateUser(form, dataId.value)
@@ -175,5 +195,35 @@ const save = async () => {
   }
 }
 
+// 新增
+const onAdd = async () => {
+  reset()
+  if (!deptList.value.length) {
+    await getDeptList()
+  }
+  if (!roleList.value.length) {
+    await getRoleList()
+  }
+  dataId.value = ''
+  visible.value = true
+}
+
+// 修改
+const onUpdate = async (id: string) => {
+  reset()
+  dataId.value = id
+  if (!deptList.value.length) {
+    await getDeptList()
+  }
+  if (!roleList.value.length) {
+    await getRoleList()
+  }
+  const { data } = await getUser(id)
+  Object.assign(form, data)
+  visible.value = true
+}
+
 defineExpose({ onAdd, onUpdate })
 </script>
+
+<style scoped lang="scss"></style>

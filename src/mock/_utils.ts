@@ -7,7 +7,7 @@ export const resultSuccess = (data: unknown) => {
     code: 200,
     data,
     msg: '请求成功',
-    success: true
+    success: true,
   })
 }
 
@@ -17,7 +17,7 @@ export const resultError = (data: unknown, msg: string, code = 500) => {
     code,
     data,
     msg,
-    success: false
+    success: false,
   })
 }
 

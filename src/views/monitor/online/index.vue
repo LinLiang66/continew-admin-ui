@@ -1,8 +1,8 @@
 <template>
   <div class="table-page">
     <GiTable
-      row-key="id"
       title="在线用户"
+      row-key="id"
       :data="dataList"
       :columns="columns"
       :loading="loading"
@@ -12,16 +12,14 @@
       @refresh="search"
     >
       <template #toolbar-left>
-        <a-input v-model="queryForm.nickname" placeholder="请输入用户名/昵称" allow-clear @change="search">
-          <template #prefix><icon-search /></template>
-        </a-input>
+        <a-input-search v-model="queryForm.nickname" placeholder="搜索用户名/昵称" allow-clear @search="search" />
         <DateRangePicker v-model="queryForm.loginTime" @change="search" />
         <a-button @click="reset">
           <template #icon><icon-refresh /></template>
           <template #default>重置</template>
         </a-button>
       </template>
-      <template #nickname="{ record }">{{ record.nickname }}（{{ record.username }}）</template>
+      <template #nickname="{ record }">{{ record.nickname }}({{ record.username }})</template>
       <template #action="{ record }">
         <a-space>
           <a-popconfirm
@@ -61,24 +59,23 @@ const userStore = useUserStore()
 const currentToken = userStore.token
 
 const queryForm = reactive<OnlineUserQuery>({
-  sort: ['createTime,desc']
+  sort: ['createTime,desc'],
 })
 
 const {
   tableData: dataList,
   loading,
   pagination,
-  search
+  search,
 } = useTable((page) => listOnlineUser({ ...queryForm, ...page }), { immediate: true })
-
 const columns: TableInstanceColumns[] = [
   {
     title: '序号',
     width: 66,
     align: 'center',
-    render: ({ rowIndex }) => h('span', {}, rowIndex + 1 + (pagination.current - 1) * pagination.pageSize)
+    render: ({ rowIndex }) => h('span', {}, rowIndex + 1 + (pagination.current - 1) * pagination.pageSize),
   },
-  { title: '用户昵称', slotName: 'nickname', ellipsis: true, tooltip: true },
+  { title: '用户昵称', dataIndex: 'nickname', slotName: 'nickname', ellipsis: true, tooltip: true },
   { title: '登录 IP', dataIndex: 'ip', ellipsis: true, tooltip: true },
   { title: '登录地点', dataIndex: 'address', ellipsis: true, tooltip: true },
   { title: '浏览器', dataIndex: 'browser', ellipsis: true, tooltip: true },
@@ -87,11 +84,12 @@ const columns: TableInstanceColumns[] = [
   { title: '最后活跃时间', dataIndex: 'lastActiveTime', width: 180 },
   {
     title: '操作',
+    dataIndex: 'action',
     slotName: 'action',
     align: 'center',
     fixed: !isMobile() ? 'right' : undefined,
-    show: has.hasPermOr(['monitor:online:kickout'])
-  }
+    show: has.hasPermOr(['monitor:online:kickout']),
+  },
 ]
 
 // 重置
@@ -110,4 +108,4 @@ const handleKickout = (token: string) => {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped lang="scss"></style>

@@ -3,7 +3,7 @@
     <router-view v-slot="{ Component, route }">
       <transition :name="appStore.transitionName" mode="out-in" appear>
         <keep-alive :include="(tabsStore.cacheList as string[])">
-          <component :is="Component" :key="route.path" />
+          <component :is="Component" :key="route.path + String(tabsStore.reloadFlag)" />
         </keep-alive>
       </transition>
     </router-view>
@@ -18,7 +18,7 @@ const appStore = useAppStore()
 const tabsStore = useTabsStore()
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .main {
   width: 100%;
   height: 100%;

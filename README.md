@@ -4,7 +4,7 @@
 <img src="https://img.shields.io/badge/License-Apache--2.0-blue.svg" alt="License" />
 </a>
 <a href="https://github.com/Charles7c/continew-admin-ui" target="_blank">
-<img src="https://img.shields.io/badge/RELEASE-v3.3.0-%23ff3f59.svg" alt="Release" />
+<img src="https://img.shields.io/badge/RELEASE-v3.4.1-%23ff3f59.svg" alt="Release" />
 </a>
 <a href="https://github.com/Charles7c/continew-admin" target="_blank">
 <img src="https://img.shields.io/github/stars/Charles7c/continew-admin?style=social" alt="GitHub stars" />
@@ -19,10 +19,10 @@
 <img src="https://gitee.com/continew/continew-admin/badge/fork.svg?theme=white" alt="Gitee forks" />
 </a>
 <a href="https://github.com/Charles7c/continew-admin-ui" target="_blank">
-<img src="https://img.shields.io/badge/Vue-3.4.21-%236CB52D.svg" alt="Release" />
+<img src="https://img.shields.io/badge/Vue-3.5.4-%236CB52D.svg" alt="Release" />
 </a>
 <a href="https://github.com/Charles7c/continew-admin-ui" target="_blank">
-<img src="https://img.shields.io/badge/Arco Design Vue-2.55.0-%236CB52D.svg" alt="Release" />
+<img src="https://img.shields.io/badge/Arco Design Vue-2.56.0-%236CB52D.svg" alt="Release" />
 </a>
 <a href="https://github.com/Charles7c/continew-admin-ui" target="_blank">
 <img src="https://img.shields.io/badge/TypeScript-5.0.4-%236CB52D.svg" alt="Release" />
@@ -79,7 +79,7 @@ ContiNew Admin（Continue New Admin）持续迭代优化的前后端分离中后
 ```java
 @Tag(name = "部门管理 API")
 @RestController
-@CrudRequestMapping(value = "/system/dept", api = {Api.TREE, Api.GET, Api.ADD, Api.UPDATE, Api.DELETE, Api.EXPORT})
+@CrudRequestMapping(value = "/system/dept", api = {Api.TREE, Api.DETAIL, Api.ADD, Api.UPDATE, Api.DELETE, Api.EXPORT})
 public class DeptController extends BaseController<DeptService, DeptResp, DeptDetailResp, DeptQuery, DeptReq> {}
 ```
 
@@ -110,41 +110,63 @@ public class DeptController extends BaseController<DeptService, DeptResp, DeptDe
 > [!TIP]
 > 更多功能和优化正在赶来💦，最新项目计划、进展请进群或关注 [任务清单](https://continew.top/admin/intro/require.html#任务清单) 和 [更新日志](https://continew.top/admin/other/changelog.html)。
 
+- 仪表盘：提供工作台、分析页，工作台提供功能快捷导航入口、最新公告、动态；分析页提供全面数据可视化能力
 - 个人中心：支持基础信息修改、密码修改、邮箱绑定、手机号绑定（并提供行为验证码、短信限流等安全处理）、第三方账号绑定/解绑、头像裁剪上传
-- 消息中心：提供站内信消息统一查看、标记已读、全部已读、删除等功能
-- 用户管理：提供用户的相关配置，新增、修改、删除、重置密码、导出
-- 部门管理：可配置系统组织架构，并以树形表格展示
-- 角色管理：对权限与菜单进行分配，可根据部门设置角色的数据权限
-- 菜单管理：已实现菜单动态路由，后端可配置化，支持多级菜单
-- 通知公告：提供公告的发布、查看和删除等功能。管理员可以在后台发布公告，并可以设置公告的生效时间、终止时间，以 markdown-it 为内核渲染 Markdown 格式内容显示
-- 字典管理：提供对系统公用数据字典的维护，例如：公告类型，支持字典标签背景色和排序等配置
-- 文件管理：提供文件上传、下载、预览（目前支持图片、音视频）、重命名、切换视图（列表、网格）等功能
-- 存储管理：提供文件存储库新增、编辑、删除等功能，支持本地存储、兼容 S3 协议存储
+- 消息中心：提供站内信消息统一查看、标记已读、全部已读、删除等功能（目前仅支持系统通知消息）
+- 用户管理：管理系统用户，包含新增、修改、删除、导入、导出、重置密码、分配角色等功能
+
+- 角色管理：管理系统用户的功能权限及数据权限，包含新增、修改、删除、分配角色等功能
+
+- 菜单管理：管理系统菜单及按钮权限，支持多级菜单，动态路由，包含新增、修改、删除等功能
+
+- 部门管理：管理系统组织架构，包含新增、修改、删除、导出等功能，以树形列表进行展示
+
+- 字典管理：管理系统公用数据字典，例如：消息类型。支持字典标签背景色和排序等配置
+
+- 通知公告：管理系统公告，支持设置公告的生效时间、终止时间、通知范围（所有人、指定用户）
+
+- 文件管理：管理系统文件，支持上传、下载、预览（目前支持图片、音视频、PDF、Word、Excel、PPT）、重命名、切换视图（列表、网格）等功能
+
+- 存储管理：管理文件存储配置，支持本地存储、兼容 S3 协议存储
+
 - 系统配置：
-    - 基础配置：提供修改系统标题、Logo、favicon、版权信息等基础配置功能，以方便用户系统与其自身品牌形象保持一致
-    - 邮件配置：提供系统发件箱配置，也支持通过配置文件指定
-    - 安全配置：提供密码策略修改，支持丰富的密码策略设定，包括但不限于 `密码有效期`、`密码重复次数`、`密码错误锁定账号次数、时间` 等
+  - 基础配置：提供修改系统标题、Logo、favicon、版权信息等基础配置功能，以方便用户系统与其自身品牌形象保持一致
+  - 邮件配置：提供系统发件箱配置，也支持通过配置文件指定
+  - 安全配置：提供密码策略修改，支持丰富的密码策略设定，包括但不限于 `密码有效期`、`密码重复次数`、`密码错误锁定账号次数、时间` 等
+
+- 在线用户：管理当前登录用户，可一键踢除下线
+
+- 日志管理：管理系统登录日志、操作日志，支持查看日志详情，包含请求头、响应头等报文信息
+
+- 任务管理：管理系统定时任务，包含新增、修改、删除、执行功能，支持 Cron（可配置式生成 Cron 表达式） 和固定频率
+
+- 任务日志：管理定时任务执行日志，包含停止、重试指定批次，查询集群各节点的详细输出日志等功能
+
+- 应用管理：管理第三方系统应用 AK、SK，包含新增、修改、删除、查看密钥、重置密钥等功能，支持设置密钥有效期
+
 - 代码生成：提供根据数据库表自动生成相应的前后端 CRUD 代码的功能，支持同步最新表结构及代码生成预览
-- 在线用户：管理当前登录用户，可一键踢下线
-- 日志管理：提供登录日志、操作日志管理功能，可查看指定日志的详细请求及响应信息
 
 ## 系统截图
 
 > [!TIP]
-> 受篇幅长度及功能更新频率影响，下方仅为系统 **部分** 功能于 **2024年6月13日** 进行的截图，更多新增功能及细节请登录演示环境或 clone 代码到本地启动查看。
+> 受篇幅长度及功能更新频率影响，下方仅为系统 **部分** 功能于 **2024年11月18日** 进行的截图，更多新增功能及细节请登录演示环境或 clone 代码到本地启动查看。
 
 <table border="1" cellpadding="1" cellspacing="1" style="width: 500px">
     <tbody>
         <tr>
             <td><img src=".image/screenshot/000登录页面.png" alt="登录页面" width="1920" /></td>
+            <td><img src=".image/screenshot/000登录页面-H5.png" alt="登录页面-H5" width="1920" /></td>
+        </tr>
+        <tr>
             <td><img src=".image/screenshot/001仪表盘.png" alt="仪表盘" width="1920" /></td>
+            <td><img src=".image/screenshot/002分析页.png" alt="分析页" width="1920" /></td>
         </tr>
-        <tr>
-            <td><img src=".image/screenshot/002仪表盘-查看公告.png" alt="仪表盘-查看公告" width="1920" /></td>
+       <tr>
             <td><img src=".image/screenshot/010个人中心.png" alt="个人中心" width="1920" /></td>
+            <td><img src=".image/screenshot/013消息中心.png" alt="消息中心" width="1920" /></td>
         </tr>
         <tr>
-            <td><img src=".image/screenshot/011消息中心.png" alt="消息中心" width="1920" /></td>
+            <td><img src=".image/screenshot/011安全设置-修改邮箱.png" alt="安全设置-修改邮箱" width="1920" /></td>
             <td><img src=".image/screenshot/012安全设置-修改邮箱-邮箱验证码.png" alt="安全设置-修改邮箱-邮箱验证码" width="1920" /></td>
         </tr>
         <tr>
@@ -156,44 +178,36 @@ public class DeptController extends BaseController<DeptService, DeptResp, DeptDe
             <td><img src=".image/screenshot/021系统管理-用户管理-新增.png" alt="系统管理-用户管理-新增" width="1920" /></td>
         </tr>
         <tr>
-            <td><img src=".image/screenshot/025系统管理-部门管理-列表.png" alt="系统管理-部门管理-列表" width="1920" /></td>
-            <td><img src=".image/screenshot/026系统管理-部门管理-新增.png" alt="系统管理-部门管理-新增" width="1920" /></td>
+            <td><img src=".image/screenshot/025系统管理-角色管理-列表.png" alt="系统管理-角色管理-列表" width="1920" /></td>
+            <td><img src=".image/screenshot/026系统管理-角色管理-新增.png" alt="系统管理-角色管理-新增" width="1920" /></td>
         </tr>
         <tr>
-            <td><img src=".image/screenshot/030系统管理-角色管理-列表.png" alt="系统管理-角色管理-列表" width="1920" /></td>
-            <td><img src=".image/screenshot/031系统管理-角色管理-新增.png" alt="系统管理-角色管理-新增" width="1920" /></td>
+            <td><img src=".image/screenshot/030系统管理-菜单管理-列表.png" alt="系统管理-菜单管理-列表" width="1920" /></td>
+            <td><img src=".image/screenshot/031系统管理-菜单管理-新增.png" alt="系统管理-菜单管理-新增" width="1920" /></td>
         </tr>
         <tr>
-            <td><img src=".image/screenshot/035系统管理-菜单管理-列表.png" alt="系统管理-菜单管理-列表" width="1920" /></td>
-            <td><img src=".image/screenshot/036系统管理-菜单管理-新增.png" alt="系统管理-菜单管理-新增" width="1920" /></td>
+            <td><img src=".image/screenshot/045系统管理-公告管理-列表.png" alt="系统管理-公告管理-列表" width="1920" /></td>
+            <td><img src=".image/screenshot/046系统管理-公告管理-修改.png" alt="系统管理-公告管理-修改" width="1920" /></td>
         </tr>
         <tr>
-            <td><img src=".image/screenshot/040系统管理-公告管理-列表.png" alt="系统管理-公告管理-列表" width="1920" /></td>
-            <td><img src=".image/screenshot/041系统管理-公告管理-修改.png" alt="系统管理-公告管理-修改" width="1920" /></td>
+            <td><img src=".image/screenshot/040系统管理-字典管理-列表.png" alt="系统管理-字典管理-列表" width="1920" /></td>
+            <td><img src=".image/screenshot/041系统管理-字典项管理.png" alt="系统管理-字典项管理" width="1920" /></td>
         </tr>
         <tr>
-            <td><img src=".image/screenshot/045系统管理-字典管理-列表.png" alt="系统管理-字典管理-列表" width="1920" /></td>
-            <td><img src=".image/screenshot/046系统管理-字典项管理.png" alt="系统管理-字典项管理" width="1920" /></td>
-        </tr>
-        <tr>
-            <td><img src=".image/screenshot/050系统管理-文件管理-列表-1.png" alt="系统管理-文件管理-列表-1" width="1920" /></td>
             <td><img src=".image/screenshot/051系统管理-文件管理-列表-2.png" alt="系统管理-文件管理-列表-2" width="1920" /></td>
+            <td><img src=".image/screenshot/052系统管理-文件管理-查看文档.png" alt="系统管理-文件管理-查看文档" width="1920" /></td>
         </tr>
         <tr>
-            <td><img src=".image/screenshot/052系统管理-文件管理-图片.png" alt="系统管理-文件管理-图片" width="1920" /></td>
-            <td><img src=".image/screenshot/053系统管理-文件管理-音乐.png" alt="系统管理-文件管理-音乐" width="1920" /></td>
+            <td><img src=".image/screenshot/301系统工具-代码生成-配置.png" alt="系统工具-代码生成-配置" width="1920" /></td>
+            <td><img src=".image/screenshot/302系统工具-代码生成-预览.png" alt="系统工具-代码生成-预览" width="1920" /></td>
         </tr>
         <tr>
-            <td><img src=".image/screenshot/101系统工具-代码生成-配置.png" alt="系统工具-代码生成-配置" width="1920" /></td>
-            <td><img src=".image/screenshot/102系统工具-代码生成-预览.png" alt="系统工具-代码生成-预览" width="1920" /></td>
+            <td><img src=".image/screenshot/100系统监控-在线用户.png" alt="系统监控-在线用户" width="1920" /></td>
+            <td><img src=".image/screenshot/101系统监控-系统日志-登录日志.png" alt="系统监控-系统日志-登录日志" width="1920" /></td>
         </tr>
         <tr>
-            <td><img src=".image/screenshot/200系统监控-在线用户.png" alt="系统监控-在线用户" width="1920" /></td>
-            <td><img src=".image/screenshot/201系统监控-系统日志-登录日志.png" alt="系统监控-系统日志-登录日志" width="1920" /></td>
-        </tr>
-        <tr>
-            <td><img src=".image/screenshot/202系统监控-系统日志-操作日志.png" alt="系统监控-系统日志-操作日志" width="1920" /></td>
-            <td><img src=".image/screenshot/202系统监控-系统日志-操作日志-详情.png" alt="系统监控-系统日志-操作日志-详情" width="1920" /></td>
+            <td><img src=".image/screenshot/102系统监控-系统日志-操作日志.png" alt="系统监控-系统日志-操作日志" width="1920" /></td>
+            <td><img src=".image/screenshot/103系统监控-系统日志-操作日志-详情.png" alt="系统监控-系统日志-操作日志-详情" width="1920" /></td>
         </tr>
     </tbody>
 </table>
@@ -230,10 +244,12 @@ continew-admin-ui
 ├─ src
 │  ├─ apis             # 请求接口
 │  │  ├─ auth            # 认证模块
+│  │  ├─ code            # 代码生成模块
 │  │  ├─ common          # 公共模块
 │  │  ├─ monitor         # 系统监控模块
-│  │  ├─ system          # 系统管理模块
-│  │  └─ tool            # 系统工具模块
+│  │  ├─ open            # 能力开放模块
+│  │  ├─ schedule        # 任务调度模块
+│  │  └─ system          # 系统管理模块
 │  ├─ assets           # 静态资源
 │  │  ├─ icons           # 图标资源
 │  │  ├─ images          # 图片资源
@@ -250,19 +266,23 @@ continew-admin-ui
 │  ├─ types            # TypeScript 类型
 │  ├─ utils            # 工具库（mock 全局开启/关闭）
 │  ├─ views            # 页面
+│  │  ├─ code            # 代码生成
+│  │  │  └─ generator      # 代码生成
+│  │  ├─ dashboard       # 仪表盘
+│  │  │  ├─ analysis       # 分析页
+│  │  │  └─ workplace      # 工作台
 │  │  ├─ default         # 默认页面
-│  │  ├─ home            # 首页模块
 │  │  ├─ login           # 登录模块
 │  │  ├─ monitor         # 系统监控
 │  │  │  ├─ log            # 系统日志
 │  │  │  │  ├─ login         # 登录日志
-│  │  │  │  ├─ operation     # 操作日志
-│  │  │  │  └─ index
+│  │  │  │  └─ operation     # 操作日志
 │  │  │  └─ online           # 在线用户
+│  │  ├─ open            # 能力开放
+│  │  │ └─ user            # 应用管理
 │  │  ├─ setting         # 设置
-│  │  │  ├─ profile        # 账号管理
-│  │  ├─ tool            # 系统工具
-│  │  │  └─ generator      # 代码生成
+│  │  │  ├─ profile        # 个人中心
+│  │  │  └─ message        # 消息中心
 │  │  └─ system          # 系统管理
 │  │    ├─ config          # 系统配置
 │  │    ├─ dept            # 部门管理
@@ -332,22 +352,11 @@ ContiNew Admin 的分支目前分为下个大版本的开发分支和上个大�
 
 ## 反馈交流
 
-欢迎各位小伙伴儿扫描下方二维码加好友，备注 `cnadmin`，拉你进群，探讨技术、提提需求~
-
-加入交流群后，你将会：
-
-- 第一时间收到框架动态
-- 第一时间收到框架更新通知
-- 第一时间收到框架 Bug 通知
-- 和众多大佬互相 (huá shuǐ) 交流 (mō yú)
+欢迎各位小伙伴儿扫描下方二维码加入项目交流群，与项目维护团队及其他大佬用户实时交流讨论。
 
 <div align="left">
-  <img src=".image/qrcode.jpg" alt="二维码" width="230px" />
+  <img src=".image/qrcode.jpg" alt="二维码" height="230px" />
 </div>
-<details>
-<summary>无加群意愿</summary>
-如无加群意愿，欢迎在 <a href="https://github.com/Charles7c/continew-admin-ui/issues" target="_blank">Issues</a> 中反馈交流~ 🍻
-</details>
 
 ## 鸣谢
 

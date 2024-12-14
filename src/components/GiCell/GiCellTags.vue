@@ -1,5 +1,5 @@
 <template>
-  <a-overflow-list v-if="data.length">
+  <a-overflow-list v-if="data && data.length">
     <a-tag v-for="(item, index) in data" :key="index" size="small">
       {{ item }}
     </a-tag>
@@ -18,11 +18,11 @@
   </a-overflow-list>
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 defineOptions({ name: 'GiCellTags' })
 
 withDefaults(defineProps<Props>(), {
-  data: () => []
+  data: () => [],
 })
 
 interface Props {
@@ -30,4 +30,4 @@ interface Props {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped lang="scss"></style>

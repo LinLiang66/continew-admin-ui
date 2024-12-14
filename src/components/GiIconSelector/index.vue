@@ -74,7 +74,7 @@ defineOptions({ name: 'GiIconSelector' })
 
 const props = withDefaults(defineProps<Props>(), {
   modelValue: '',
-  enableCopy: false
+  enableCopy: false,
 })
 
 const emit = defineEmits(['select', 'update:modelValue'])
@@ -149,7 +149,7 @@ const handleSelectedIcon = async (icon: string) => {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .container {
   width: 300px;
   overflow: hidden;

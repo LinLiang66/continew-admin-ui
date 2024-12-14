@@ -1,11 +1,11 @@
 <template>
   <a-modal
-      v-model:visible="visible"
-      :width="width >= 1350 ? 1350 : '100%'"
-      :on-before-close="onClose"
-      :footer="false"
-      esc-to-close="esc-to-close"
-      @close="onClose"
+    v-model:visible="visible"
+    :width="width >= 1350 ? 1350 : '100%'"
+    :on-before-close="onClose"
+    :footer="false"
+    esc-to-close="esc-to-close"
+    @close="onClose"
   >
     <template #title>
       {{ modalTitle }}
@@ -18,26 +18,26 @@
     <a-spin :loading="loading" class="w-full mt--10">
       <a-card class="preview-content">
         <VueOfficePdf
-            v-if="filePreview.fileInfo?.fileType === 'pdf'"
-            :src="filePreview.fileInfo?.data"
-            class="h-full"
-            @rendered="renderedHandler"
-            @error="errorHandler"
+          v-if="filePreview.fileInfo?.fileType === 'pdf'"
+          :src="filePreview.fileInfo?.data"
+          class="h-full"
+          @rendered="renderedHandler"
+          @error="errorHandler"
         />
         <VueOfficeDocx
-            v-else-if="WordTypes.includes(filePreview.fileInfo?.fileType || '')"
-            :src="filePreview.fileInfo?.data"
-            class="h-full"
-            @rendered="renderedHandler"
-            @error="errorHandler"
+          v-else-if="WordTypes.includes(filePreview.fileInfo?.fileType || '')"
+          :src="filePreview.fileInfo?.data"
+          class="h-full"
+          @rendered="renderedHandler"
+          @error="errorHandler"
         />
         <VueOfficeExcel
-            v-else-if="ExcelTypes.includes(filePreview.fileInfo?.fileType || '')"
-            :src="filePreview.fileInfo?.data"
-            style="height: 80vh; width: 100%"
-            :options="filePreview.excelConfig"
-            @rendered="renderedHandler"
-            @error="errorHandler"
+          v-else-if="ExcelTypes.includes(filePreview.fileInfo?.fileType || '')"
+          :src="filePreview.fileInfo?.data"
+          style="height: 80vh; width: 100%"
+          :options="filePreview.excelConfig"
+          @rendered="renderedHandler"
+          @error="errorHandler"
         />
       </a-card>
     </a-spin>
@@ -65,7 +65,7 @@ const blobUrl = ref<string>('')
 // 文件预览对象
 const filePreview = reactive<FilePreview>({
   fileInfo: {},
-  excelConfig: {}
+  excelConfig: {},
 })
 // 弹框标题
 const modalTitle = computed(() => {
@@ -124,7 +124,7 @@ const onOpen = () => {
 const onClose = () => {
   Object.assign(filePreview, {
     fileInfo: {},
-    excelConfig: {}
+    excelConfig: {},
   })
   loading.value = false
   visible.value = false

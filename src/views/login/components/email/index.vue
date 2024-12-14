@@ -25,31 +25,38 @@
     </a-form-item>
     <a-form-item>
       <a-space direction="vertical" fill class="w-full">
-        <a-button disabled class="btn" type="primary" :loading="loading" html-type="submit" size="large" long>立即登录</a-button
-        >
+        <a-button disabled class="btn" type="primary" :loading="loading" html-type="submit" size="large" long>立即登录</a-button>
       </a-space>
     </a-form-item>
+    <Verify
+      ref="VerifyRef"
+      :captcha-type="captchaType"
+      :mode="captchaMode"
+      :img-size="{ width: '330px', height: '155px' }"
+      @success="getCaptcha"
+    />
   </a-form>
 </template>
 
 <script setup lang="ts">
-// import { getEmailCaptcha } from '@/apis'
 import { type FormInstance, Message } from '@arco-design/web-vue'
+import type { BehaviorCaptchaReq } from '@/apis'
+// import { type BehaviorCaptchaReq, getEmailCaptcha } from '@/apis'
 import { useTabsStore, useUserStore } from '@/stores'
 import * as Regexp from '@/utils/regexp'
 
 const formRef = ref<FormInstance>()
 const form = reactive({
   email: '',
-  captcha: ''
+  captcha: '',
 })
 
 const rules: FormInstance['rules'] = {
   email: [
     { required: true, message: '请输入邮箱' },
-    { match: Regexp.Email, message: '请输入正确的邮箱' }
+    { match: Regexp.Email, message: '请输入正确的邮箱' },
   ],
-  captcha: [{ required: true, message: '请输入验证码' }]
+  captcha: [{ required: true, message: '请输入验证码' }],
 }
 
 const userStore = useUserStore()
@@ -65,11 +72,11 @@ const handleLogin = async () => {
     await userStore.emailLogin(form)
     tabsStore.reset()
     const { redirect, ...othersQuery } = router.currentRoute.value.query
-    router.push({
+    await router.push({
       path: (redirect as string) || '/',
       query: {
-        ...othersQuery
-      }
+        ...othersQuery,
+      },
     })
     Message.success('欢迎使用')
   } catch (error) {
@@ -77,6 +84,19 @@ const handleLogin = async () => {
   } finally {
     loading.value = false
   }
+}
+
+const VerifyRef = ref<InstanceType<any>>()
+const captchaType = ref('blockPuzzle')
+const captchaMode = ref('pop')
+const captchaLoading = ref(false)
+
+// 弹出行为验证码
+const onCaptcha = async () => {
+  if (captchaLoading.value) return
+  const isInvalid = await formRef.value?.validateField('email')
+  if (isInvalid) return
+  VerifyRef.value.show()
 }
 
 const captchaTimer = ref()
@@ -91,18 +111,13 @@ const resetCaptcha = () => {
   captchaDisable.value = false
 }
 
-const captchaLoading = ref(false)
 // 获取验证码
-const onCaptcha = async () => {
-  if (captchaLoading.value) return
-  const isInvalid = await formRef.value?.validateField('email')
-  if (isInvalid) return
+// eslint-disable-next-line unused-imports/no-unused-vars
+const getCaptcha = async (captchaReq: BehaviorCaptchaReq) => {
   try {
     captchaLoading.value = true
     captchaBtnName.value = '发送中...'
-    // await getEmailCaptcha({
-    //   email: form.email
-    // })
+    // await getEmailCaptcha(form.email, captchaReq)
     captchaLoading.value = false
     captchaDisable.value = true
     captchaBtnName.value = `获取验证码(${(captchaTime.value -= 1)}s)`
@@ -123,7 +138,7 @@ const onCaptcha = async () => {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .arco-input-wrapper,
 :deep(.arco-select-view-single) {
   height: 40px;

@@ -1,8 +1,8 @@
 <template>
   <div class="table-page">
     <GiTable
-      row-key="id"
       title="存储管理"
+      row-key="id"
       :data="dataList"
       :columns="columns"
       :loading="loading"
@@ -13,9 +13,7 @@
       @refresh="search"
     >
       <template #toolbar-left>
-        <a-input v-model="queryForm.description" placeholder="请输入名称/编码/描述" allow-clear @change="search">
-          <template #prefix><icon-search /></template>
-        </a-input>
+        <a-input-search v-model="queryForm.description" placeholder="搜索名称/编码/描述" allow-clear @search="search" />
         <a-select
           v-model="queryForm.status"
           :options="DisEnableStatusList"
@@ -51,12 +49,12 @@
       </template>
       <template #action="{ record }">
         <a-space>
-          <a-link v-permission="['system:storage:update']" @click="onUpdate(record)">修改</a-link>
+          <a-link v-permission="['system:storage:update']" title="修改" @click="onUpdate(record)">修改</a-link>
           <a-link
             v-permission="['system:storage:delete']"
             status="danger"
-            :title="record.isDefault ? '默认存储不能删除' : undefined"
-            :disabled="record.disabled"
+            :disabled="record.isDefault"
+            :title="record.isDefault ? '默认存储不能删除' : '删除'"
             @click="onDelete(record)"
           >
             删除
@@ -71,20 +69,20 @@
 
 <script setup lang="ts">
 import StorageAddDrawer from './StorageAddDrawer.vue'
-import { type StorageQuery, type StorageResp, deleteStorage, listStorage } from '@/apis/system'
+import { type StorageQuery, type StorageResp, deleteStorage, listStorage } from '@/apis/system/storage'
 import type { TableInstanceColumns } from '@/components/GiTable/type'
+import { DisEnableStatusList } from '@/constant/common'
 import { useTable } from '@/hooks'
 import { useDict } from '@/hooks/app'
 import { isMobile } from '@/utils'
 import has from '@/utils/has'
-import { DisEnableStatusList } from '@/constant/common'
 
 defineOptions({ name: 'SystemStorage' })
 
 const { storage_type_enum } = useDict('storage_type_enum')
 
 const queryForm = reactive<StorageQuery>({
-  sort: ['createTime,desc']
+  sort: ['createTime,desc'],
 })
 
 const {
@@ -92,20 +90,19 @@ const {
   loading,
   pagination,
   search,
-  handleDelete
+  handleDelete,
 } = useTable((page) => listStorage({ ...queryForm, ...page }), { immediate: true })
-
 const columns: TableInstanceColumns[] = [
   {
     title: '序号',
     width: 66,
     align: 'center',
-    render: ({ rowIndex }) => h('span', {}, rowIndex + 1 + (pagination.current - 1) * pagination.pageSize)
+    render: ({ rowIndex }) => h('span', {}, rowIndex + 1 + (pagination.current - 1) * pagination.pageSize),
   },
   { title: '名称', dataIndex: 'name', slotName: 'name', width: 140, ellipsis: true, tooltip: true },
   { title: '编码', dataIndex: 'code', ellipsis: true, tooltip: true },
-  { title: '状态', slotName: 'status', align: 'center' },
-  { title: '类型', slotName: 'type', align: 'center' },
+  { title: '状态', dataIndex: 'status', slotName: 'status', align: 'center' },
+  { title: '类型', dataIndex: 'type', slotName: 'type', align: 'center', ellipsis: true, tooltip: true },
   { title: '访问密钥', dataIndex: 'accessKey', ellipsis: true, tooltip: true },
   { title: '终端节点', dataIndex: 'endpoint', ellipsis: true, tooltip: true },
   { title: '桶名称', dataIndex: 'bucketName', ellipsis: true, tooltip: true },
@@ -117,12 +114,13 @@ const columns: TableInstanceColumns[] = [
   { title: '修改时间', dataIndex: 'updateTime', width: 180, show: false },
   {
     title: '操作',
+    dataIndex: 'action',
     slotName: 'action',
     width: 130,
     align: 'center',
     fixed: !isMobile() ? 'right' : undefined,
-    show: has.hasPermOr(['system:storage:update', 'system:storage:delete'])
-  }
+    show: has.hasPermOr(['system:storage:update', 'system:storage:delete']),
+  },
 ]
 
 // 重置
@@ -134,7 +132,10 @@ const reset = () => {
 
 // 删除
 const onDelete = (record: StorageResp) => {
-  return handleDelete(() => deleteStorage(record.id), { content: `是否确定删除存储 [${record.name}]？`, showModal: true })
+  return handleDelete(() => deleteStorage(record.id), {
+    content: `是否确定删除存储「${record.name}」？`,
+    showModal: true,
+  })
 }
 
 const StorageAddDrawerRef = ref<InstanceType<typeof StorageAddDrawer>>()
@@ -149,4 +150,4 @@ const onUpdate = (record: StorageResp) => {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped lang="scss"></style>

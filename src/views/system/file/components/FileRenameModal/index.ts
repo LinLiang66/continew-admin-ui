@@ -15,7 +15,7 @@ export function openFileRenameModal(data: FileItem, callback?: () => void) {
         data,
         ref: (e) => {
           ModalContentRef.value = e as any
-        }
+        },
       }),
     onBeforeOk: async () => {
       const isInvalid = await ModalContentRef.value?.formRef?.validate()
@@ -27,6 +27,6 @@ export function openFileRenameModal(data: FileItem, callback?: () => void) {
         callback()
       }
       return true
-    }
+    },
   })
 }

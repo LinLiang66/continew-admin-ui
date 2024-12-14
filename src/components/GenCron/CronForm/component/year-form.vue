@@ -30,7 +30,7 @@ import { useFormProps, useFormSetup, useFromEmits } from './use-mixin'
 export default defineComponent({
   name: 'YearForm',
   props: useFormProps({
-    defaultValue: '*'
+    defaultValue: '*',
   }),
   emits: useFromEmits(),
   setup(props, context) {
@@ -39,8 +39,8 @@ export default defineComponent({
       defaultValue: '*',
       minValue: 0,
       valueRange: { start: nowYear, end: nowYear + 100 },
-      valueLoop: { start: nowYear, interval: 1 }
+      valueLoop: { start: nowYear, interval: 1 },
     })
-  }
+  },
 })
 </script>

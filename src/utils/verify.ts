@@ -34,6 +34,6 @@ export function resetSize(vm) {
     imgWidth: img_width,
     imgHeight: img_height,
     barWidth: bar_width,
-    barHeight: bar_height
+    barHeight: bar_height,
   }
 }

@@ -16,7 +16,7 @@ import FileMain from './main/FileMain/index.vue'
 defineOptions({ name: 'SystemFile' })
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .file-manage {
   flex: 1;
   padding: $margin;

@@ -2,14 +2,13 @@
   <div class="table-page">
     <GiTable
       ref="tableRef"
-      row-key="id"
       title="部门管理"
+      row-key="id"
       :data="dataList"
       :columns="columns"
       :loading="loading"
       :scroll="{ x: '100%', y: '100%', minWidth: 1000 }"
       :pagination="false"
-      :disabled-tools="['size']"
       :disabled-column-keys="['name']"
       @refresh="search"
     >
@@ -18,7 +17,7 @@
         <IconRight v-else />
       </template>
       <template #toolbar-left>
-        <a-input v-model="name" placeholder="请输入名称" allow-clear @change="search">
+        <a-input v-model="name" placeholder="搜索名称" allow-clear>
           <template #prefix><icon-search /></template>
         </a-input>
         <a-button @click="reset">
@@ -45,54 +44,53 @@
       </template>
       <template #action="{ record }">
         <a-space>
-          <a-link v-permission="['system:dept:update']" @click="onUpdate(record)">修改</a-link>
-          <a-link v-permission="['system:dept:add']" @click="onAdd(record.id)">新增</a-link>
+          <a-link v-permission="['system:dept:update']" title="修改" @click="onUpdate(record)">修改</a-link>
           <a-link
             v-permission="['system:dept:delete']"
             status="danger"
-            :title="record.isSystem ? '系统内置数据不能删除' : undefined"
             :disabled="record.isSystem"
+            :title="record.isSystem ? '系统内置数据不能删除' : '删除'"
             @click="onDelete(record)"
           >
             删除
           </a-link>
+          <a-link v-permission="['system:dept:add']" title="新增" @click="onAdd(record.id)">新增</a-link>
         </a-space>
       </template>
     </GiTable>
 
-    <DeptAddModal ref="DeptAddModalRef" @save-success="search" />
+    <DeptAddModal ref="DeptAddModalRef" :depts="dataList" @save-success="search" />
   </div>
 </template>
 
 <script setup lang="ts">
 import DeptAddModal from './DeptAddModal.vue'
-import { type DeptQuery, type DeptResp, deleteDept, exportDept, listDept } from '@/apis/system'
-import type GiTable from '@/components/GiTable/index.vue'
+import { type DeptQuery, type DeptResp, deleteDept, exportDept, listDept } from '@/apis/system/dept'
 import type { TableInstanceColumns } from '@/components/GiTable/type'
+import type GiTable from '@/components/GiTable/index.vue'
 import { useDownload, useTable } from '@/hooks'
 import { isMobile } from '@/utils'
 import has from '@/utils/has'
 
 defineOptions({ name: 'SystemDept' })
 
-const tableRef = ref<InstanceType<typeof GiTable>>()
 const queryForm = reactive<DeptQuery>({})
+const tableRef = ref<InstanceType<typeof GiTable>>()
 const {
   tableData,
   loading,
   search,
-  handleDelete
+  handleDelete,
 } = useTable(() => listDept(queryForm), {
   immediate: true,
   onSuccess: () => {
     nextTick(() => {
       tableRef.value?.tableRef?.expandAll(true)
     })
-  }
+  },
 })
 
 // 过滤树
-const name = ref('')
 const searchData = (name: string) => {
   const loop = (data: DeptResp[]) => {
     const result = [] as DeptResp[]
@@ -104,7 +102,7 @@ const searchData = (name: string) => {
         if (filterData.length) {
           result.push({
             ...item,
-            children: filterData
+            children: filterData,
           })
         }
       }
@@ -114,16 +112,17 @@ const searchData = (name: string) => {
   return loop(tableData.value)
 }
 
+const name = ref('')
 const dataList = computed(() => {
   if (!name.value) return tableData.value
   return searchData(name.value)
 })
 
 const columns: TableInstanceColumns[] = [
-  { title: '名称', dataIndex: 'name', width: 170, ellipsis: true, tooltip: true },
-  { title: '状态', slotName: 'status', align: 'center' },
+  { title: '名称', dataIndex: 'name', minWidth: 170, ellipsis: true, tooltip: true },
+  { title: '状态', dataIndex: 'status', slotName: 'status', align: 'center' },
   { title: '排序', dataIndex: 'sort', align: 'center', show: false },
-  { title: '系统内置', slotName: 'isSystem', align: 'center', show: false },
+  { title: '系统内置', dataIndex: 'isSystem', slotName: 'isSystem', align: 'center', show: false },
   { title: '描述', dataIndex: 'description', ellipsis: true, tooltip: true },
   { title: '创建人', dataIndex: 'createUserString', ellipsis: true, tooltip: true, show: false },
   { title: '创建时间', dataIndex: 'createTime', width: 180 },
@@ -131,12 +130,13 @@ const columns: TableInstanceColumns[] = [
   { title: '修改时间', dataIndex: 'updateTime', width: 180, show: false },
   {
     title: '操作',
+    dataIndex: 'action',
     slotName: 'action',
-    width: 180,
+    width: 160,
     align: 'center',
     fixed: !isMobile() ? 'right' : undefined,
-    show: has.hasPermOr(['system:dept:update', 'system:dept:delete', 'system:dept:add'])
-  }
+    show: has.hasPermOr(['system:dept:update', 'system:dept:delete', 'system:dept:add']),
+  },
 ]
 
 // 重置
@@ -147,8 +147,8 @@ const reset = () => {
 // 删除
 const onDelete = (record: DeptResp) => {
   return handleDelete(() => deleteDept(record.id), {
-    content: `是否确定删除 [${record.name}]？`,
-    showModal: true
+    content: `是否确定删除部门「${record.name}」？`,
+    showModal: true,
   })
 }
 
@@ -169,4 +169,4 @@ const onUpdate = (record: DeptResp) => {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped lang="scss"></style>

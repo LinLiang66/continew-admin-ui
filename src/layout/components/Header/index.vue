@@ -23,7 +23,7 @@ import MenuFoldBtn from '../MenuFoldBtn.vue'
 defineOptions({ name: 'LayoutHeader' })
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .arco-dropdown-open .arco-icon-down {
   transform: rotate(180deg);
 }

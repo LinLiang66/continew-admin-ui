@@ -1,16 +1,17 @@
 {
   "name": "continew-admin-ui",
   "type": "module",
-  "version": "3.3.0",
+  "version": "3.4.1",
   "private": "true",
   "scripts": {
+    "bootstrap": "pnpm install --registry=https://registry.npmmirror.com",
     "dev": "vite --host",
     "build": "vue-tsc --noEmit && vite build",
     "build:test": "vue-tsc --noEmit && vite build --mode test",
     "preview": "vite preview --port 5050",
     "typecheck": "vue-tsc --noEmit",
-    "lint": "eslint src",
-    "lint:fix": "eslint src --fix"
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
     "@amap/amap-jsapi-loader": "^1.0.1",
@@ -20,6 +21,9 @@
     "@codemirror/lang-vue": "^0.1.2",
     "@codemirror/theme-one-dark": "^6.1.2",
     "@ddietr/codemirror-themes": "^1.4.2",
+    "@vue-office/docx": "1.6.0",
+    "@vue-office/excel": "1.7.1",
+    "@vue-office/pdf": "1.6.4",
     "@vueuse/components": "^10.5.0",
     "@vueuse/core": "^10.5.0",
     "aieditor": "^1.0.13",
@@ -31,6 +35,7 @@
     "dayjs": "^1.11.4",
     "echarts": "^5.4.2",
     "jsencrypt": "^3.3.2",
+    "lint-staged": "^15.2.10",
     "lodash-es": "^4.17.21",
     "mitt": "^3.0.0",
     "mockjs": "^1.1.0",
@@ -42,7 +47,7 @@
     "v-viewer": "^3.0.10",
     "viewerjs": "^1.11.6",
     "vite-plugin-vue-devtools": "^7.0.27",
-    "vue": "^3.4.21",
+    "vue": "^3.5.4",
     "vue-codemirror6": "^1.1.27",
     "vue-color-kit": "^1.0.5",
     "vue-cropper": "^1.1.1",
@@ -52,10 +57,7 @@
     "vue-json-pretty": "^2.4.0",
     "vue-router": "^4.3.3",
     "xe-utils": "^3.5.7",
-    "xgplayer": "^2.31.6",
-    "@vue-office/docx": "1.6.0",
-    "@vue-office/excel": "1.7.1",
-    "@vue-office/pdf": "1.6.4"
+    "xgplayer": "^2.31.6"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.16.3",
@@ -81,5 +83,11 @@
     "vite-plugin-style-import": "^2.0.0",
     "vite-plugin-svg-icons": "^2.0.1",
     "vue-tsc": "2.0.19"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm lint-staged"
+  },
+  "lint-staged": {
+    "*": "eslint --fix"
   }
 }

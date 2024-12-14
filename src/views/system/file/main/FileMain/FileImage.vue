@@ -26,13 +26,13 @@ const getFileImg = computed<string>(() => {
     return props.data.url || ''
   }
   if (!Object.keys(FileIcon).includes(extension)) {
-    return FileIcon['other']
+    return FileIcon.other
   }
   return FileIcon[extension]
 })
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .file-image {
   width: 100%;
   height: 100%;

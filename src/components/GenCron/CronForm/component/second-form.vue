@@ -44,7 +44,7 @@ import { useFormProps, useFormSetup, useFromEmits } from './use-mixin'
 export default defineComponent({
   name: 'SecondForm',
   props: useFormProps({
-    defaultValue: '*'
+    defaultValue: '*',
   }),
   emits: useFromEmits(),
   setup(props, context) {
@@ -53,8 +53,8 @@ export default defineComponent({
       minValue: 0,
       maxValue: 59,
       valueRange: { start: 0, end: 59 },
-      valueLoop: { start: 0, interval: 1 }
+      valueLoop: { start: 0, interval: 1 },
     })
-  }
+  },
 })
 </script>

@@ -1,7 +1,7 @@
 <template>
   <a-drawer
     v-model:visible="visible"
-    :title="title"
+    title="修改角色"
     :mask-closable="false"
     :esc-to-close="false"
     :width="width >= 600 ? 600 : '100%'"
@@ -15,7 +15,7 @@
           <a-input v-model.trim="form.name" placeholder="请输入名称" />
         </a-form-item>
         <a-form-item label="编码" field="code">
-          <a-input v-model.trim="form.code" placeholder="请输入编码" :disabled="isUpdate" />
+          <a-input v-model.trim="form.code" placeholder="请输入编码" :disabled="true" />
         </a-form-item>
         <a-form-item label="排序" field="sort">
           <a-input-number v-model="form.sort" placeholder="请输入排序" :min="1" mode="button" />
@@ -41,6 +41,7 @@
           <template #extra>
             <a-tree
               ref="menuTreeRef"
+              class="menu-tree"
               :data="menuList"
               :default-expand-all="isMenuExpanded"
               :check-strictly="!form.menuCheckStrictly"
@@ -83,34 +84,34 @@
 <script setup lang="ts">
 import { type FormInstance, Message, type TreeNodeData } from '@arco-design/web-vue'
 import { useWindowSize } from '@vueuse/core'
-import { addRole, getRole, updateRole } from '@/apis/system'
-import { useForm } from '@/hooks'
+import { getRole, updateRole } from '@/apis/system/role'
+import { useResetReactive } from '@/hooks'
 import { useDept, useDict, useMenu } from '@/hooks/app'
 
 const emit = defineEmits<{
   (e: 'save-success'): void
 }>()
+
 const { width } = useWindowSize()
+
+const dataId = ref('')
+const visible = ref(false)
+const formRef = ref<FormInstance>()
 const { data_scope_enum } = useDict('data_scope_enum')
 const { deptList, getDeptList } = useDept()
 const { menuList, getMenuList } = useMenu()
 
-const dataId = ref('')
-const isUpdate = computed(() => !!dataId.value)
-const title = computed(() => (isUpdate.value ? '修改角色' : '新增角色'))
-const formRef = ref<FormInstance>()
-
 const rules: FormInstance['rules'] = {
   name: [{ required: true, message: '请输入名称' }],
   code: [{ required: true, message: '请输入编码' }],
-  dataScope: [{ required: true, message: '请选择数据权限' }]
+  dataScope: [{ required: true, message: '请选择数据权限' }],
 }
 
-const { form, resetForm } = useForm({
+const [form, resetForm] = useResetReactive({
   menuCheckStrictly: true,
   deptCheckStrictly: true,
   sort: 999,
-  dataScope: 4
+  dataScope: 4,
 })
 
 const menuTreeRef = ref()
@@ -133,45 +134,6 @@ const reset = () => {
   resetForm()
 }
 
-const visible = ref(false)
-// 新增
-const onAdd = () => {
-  if (!menuList.value.length) {
-    getMenuList()
-  }
-  reset()
-  dataId.value = ''
-  visible.value = true
-  if (!deptList.value.length) {
-    getDeptList()
-  }
-}
-
-// 修改
-const onUpdate = async (id: string) => {
-  if (!menuList.value.length) {
-    await getMenuList()
-  }
-  if (!deptList.value.length) {
-    await getDeptList()
-  }
-  reset()
-  dataId.value = id
-  const { data } = await getRole(id)
-  Object.assign(form, data)
-  data.menuIds?.forEach((node) => {
-    nextTick(() => {
-      menuTreeRef.value?.checkNode(node, true, true)
-    })
-  })
-  data.deptIds?.forEach((node) => {
-    nextTick(() => {
-      deptTreeRef.value?.checkNode(node, true, true)
-    })
-  })
-  visible.value = true
-}
-
 // 获取所有选中的菜单
 const getMenuAllCheckedKeys = () => {
   // 获取目前被选中的菜单
@@ -180,8 +142,7 @@ const getMenuAllCheckedKeys = () => {
   // 获取半选中的菜单
   const halfCheckedNodes = menuTreeRef.value?.getHalfCheckedNodes()
   const halfCheckedKeys = halfCheckedNodes.map((item: TreeNodeData) => item.key)
-  // eslint-disable-next-line prefer-spread
-  checkedKeys.unshift.apply(checkedKeys, halfCheckedKeys)
+  checkedKeys.unshift(...halfCheckedKeys)
   return checkedKeys
 }
 
@@ -196,30 +157,8 @@ const getDeptAllCheckedKeys = () => {
   // 获取半选中的部门
   const halfCheckedNodes = deptTreeRef.value?.getHalfCheckedNodes()
   const halfCheckedKeys = halfCheckedNodes.map((item: TreeNodeData) => item.key)
-  // eslint-disable-next-line prefer-spread
-  checkedKeys.unshift.apply(checkedKeys, halfCheckedKeys)
+  checkedKeys.unshift(...halfCheckedKeys)
   return checkedKeys
-}
-
-// 保存
-const save = async () => {
-  try {
-    const isInvalid = await formRef.value?.validate()
-    if (isInvalid) return false
-    form.menuIds = getMenuAllCheckedKeys()
-    form.deptIds = getDeptAllCheckedKeys()
-    if (isUpdate.value) {
-      await updateRole(form, dataId.value)
-      Message.success('修改成功')
-    } else {
-      await addRole(form)
-      Message.success('新增成功')
-    }
-    emit('save-success')
-    return true
-  } catch (error) {
-    return false
-  }
 }
 
 // 展开/折叠
@@ -240,10 +179,51 @@ const onCheckAll = (type: string) => {
   }
 }
 
-defineExpose({ onAdd, onUpdate })
+// 保存
+const save = async () => {
+  try {
+    const isInvalid = await formRef.value?.validate()
+    if (isInvalid) return false
+    form.menuIds = getMenuAllCheckedKeys()
+    form.deptIds = getDeptAllCheckedKeys()
+    await updateRole(form, dataId.value)
+    Message.success('修改成功')
+    emit('save-success')
+    return true
+  } catch (error) {
+    return false
+  }
+}
+
+// 打开
+const onOpen = async (id: string) => {
+  reset()
+  dataId.value = id
+  if (!menuList.value.length) {
+    await getMenuList()
+  }
+  if (!deptList.value.length) {
+    await getDeptList()
+  }
+  const { data } = await getRole(id)
+  Object.assign(form, data)
+  data.menuIds?.forEach((node) => {
+    nextTick(() => {
+      menuTreeRef.value?.checkNode(node, true, true)
+    })
+  })
+  data.deptIds?.forEach((node) => {
+    nextTick(() => {
+      deptTreeRef.value?.checkNode(node, true, true)
+    })
+  })
+  visible.value = true
+}
+
+defineExpose({ onOpen })
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 fieldset {
   padding: 15px 15px 0 15px;
   margin-bottom: 15px;
@@ -255,5 +235,13 @@ fieldset legend {
   padding: 2px 5px 2px 5px;
   border: 1px solid var(--color-neutral-3);
   border-radius: 3px;
+}
+.menu-tree{
+  :deep(.arco-tree-node-is-leaf) {
+    display: inline-flex;
+  }
+  :deep(.arco-tree-node-indent-block){
+    width: 10px;
+  }
 }
 </style>

@@ -6,8 +6,12 @@
       </a-space>
     </a-row>
     <a-tabs v-model:active-key="activeKey" type="card-gutter" size="large" @change="change">
-      <a-tab-pane key="1" title="登录日志" />
-      <a-tab-pane key="2" title="操作日志" />
+      <a-tab-pane key="1">
+        <template #title><icon-lock /> 登录日志</template>
+      </a-tab-pane>
+      <a-tab-pane key="2">
+        <template #title><icon-find-replace /> 操作日志</template>
+      </a-tab-pane>
     </a-tabs>
     <keep-alive>
       <component :is="PaneMap[activeKey]" />
@@ -24,7 +28,7 @@ const router = useRouter()
 
 const PaneMap: Record<string, Component> = {
   1: LoginLog,
-  2: OperationLog
+  2: OperationLog,
 }
 
 const activeKey = ref('1')
@@ -35,7 +39,7 @@ watch(
       activeKey.value = String(route.query.tabKey)
     }
   },
-  { immediate: true }
+  { immediate: true },
 )
 
 const change = (key: string | number) => {
@@ -44,7 +48,7 @@ const change = (key: string | number) => {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 :deep(.arco-tabs .arco-tabs-nav-type-card-gutter .arco-tabs-tab-active) {
   box-shadow: inset 0 2px 0 rgb(var(--primary-6)), inset -1px 0 0 var(--color-border-2),
     inset 1px 0 0 var(--color-border-2);

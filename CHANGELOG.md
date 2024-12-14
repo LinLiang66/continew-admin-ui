@@ -1,3 +1,92 @@
+## [v3.4.1](https://github.com/continew-org/continew-admin-ui/compare/v3.4.0...v3.4.1) (2024-12-08)
+
+### ✨ 新特性
+
+* 标签页新增重新加载、关闭左侧操作 ([b030921](https://github.com/continew-org/continew-admin-ui/commit/b030921189e9093f07369cebebdfa8b12b3fb153))
+* 新增关于项目菜单（该菜单从动态路由调整为静态，且不再需要鉴权） ([7fa4297](https://github.com/continew-org/continew-admin-ui/commit/7fa42975cfa32e1fb8eeca26e3a06be2e10d2aa3)) ([2191335](https://github.com/continew-org/continew-admin-ui/commit/21913350e7d8dfd0a06464efcf27d2d234270ab0))
+* GiForm 支持 label 自定义渲染，以及插槽自定义渲染（同步 GiDemo 更新） ([c2463fc](https://github.com/continew-org/continew-admin-ui/commit/c2463fc4502acbd9274f1080f86a74ca43951927))
+* 新增验证码配置开关 ([4cd892e](https://github.com/continew-org/continew-admin-ui/commit/4cd892e288c08b04f038bf6034c14ec022c0e919)) ([51a2168](https://github.com/continew-org/continew-admin-ui/commit/51a21688223346877f00f5142e277682e5774158)) (Gitee#37@@aiming317)
+* 面包屑新增过渡动画效果（同步 GiDemo 更新） ([abacb26](https://github.com/continew-org/continew-admin-ui/commit/abacb267aaf96516480255f509b07b32d44abd27))
+
+### 💎 功能优化
+
+- 拆分并调整路由守卫，优化顶部进度条展示 ([e8941ad](https://github.com/continew-org/continew-admin-ui/commit/e8941adde4c5156bbe7f2d95f013add353aee61b))
+- 移除部分异步组件加载 ([61ef692](https://github.com/continew-org/continew-admin-ui/commit/61ef692c8398b4f352f52f11a82d64dd9f7fa8e3))
+- 重构系统配置页面 ([930227e](https://github.com/continew-org/continew-admin-ui/commit/930227ea0cc6f17545841a5548a91202fa0bc2a1))
+- useForm => useResetReactive（同步 GiDemo 更新） ([6c45483](https://github.com/continew-org/continew-admin-ui/commit/6c45483fae53677c57b9dc0c6a1e4c42b659d151)) ([7fe3ffe](https://github.com/continew-org/continew-admin-ui/commit/7fe3ffe9dab318d744d2dd8d7d1e793efdbc97d1))
+- 优化搜索输入框 input => input-search ([7402de5](https://github.com/continew-org/continew-admin-ui/commit/7402de5695140b5d4a6228fd37ef23c793c8e5e7))
+- 优化系统日志、系统配置标签样式 ([b82ca81](https://github.com/continew-org/continew-admin-ui/commit/b82ca81b79b56bfa728b7c467d151724b43792b2))
+- 调整 eslint.config.js ([99f8edb](https://github.com/continew-org/continew-admin-ui/commit/99f8edb7295f913e36cd28c41ac4a6b536c982d9))
+- 角色功能权限第三级扁平化处理 ([43dd512](https://github.com/continew-org/continew-admin-ui/commit/43dd512b8a359d794a2ad48dd4e05c22f7223391)) (Gitee#38@kiki1373639299)
+- 优化路由守卫代码（同步 GiDemo 更新） ([7c509fa](https://github.com/continew-org/continew-admin-ui/commit/7c509fa7372de5bf60895bc5e5b66cc6355c8d97))
+
+### 🐛 问题修复
+
+- 修复 GiCellTags 组件的空数据问题 ([068d959](https://github.com/continew-org/continew-admin-ui/commit/068d959d0380f85053d6f001621990309c904519)) (Gitee#35@CoderZone)
+- 修复快捷操作代码生成链接错误 ([246d638](https://github.com/continew-org/continew-admin-ui/commit/246d638a8f66bd5a98091bd12cc78f4a2083dd04))
+- 修复行为验证码接口重复请求问题 ([be4356f](https://github.com/continew-org/continew-admin-ui/commit/be4356fa041108c46eade7e1f81897346338026b))
+- 修复用户选择器超级管理员回显异常的问题 ([3f871e1](https://github.com/continew-org/continew-admin-ui/commit/3f871e102acee6481bfe3fb095279063713fe6e5)) (Gitee#36@kiki1373639299)
+
+## [v3.4.0](https://github.com/continew-org/continew-admin-ui/compare/v3.3.0...v3.4.0) (2024-11-18)
+
+### ✨ 新特性
+
+* 新增全局水印配置 支持开启全局水印，支持设置水印信息（不设置则默认显示昵称+用户名） ([8d8d79e](https://github.com/continew-org/continew-admin-ui/commit/8d8d79e5686a7b87bf6d5b28983585bcc4ccd897)) (Gitee#19)
+* 支持可视化生成 Cron 表达式 ([adcb9fe](https://github.com/continew-org/continew-admin-ui/commit/adcb9fed2a5388a1e86f6e86119f361e73d5d15f)) ([33020be](https://github.com/continew-org/continew-admin-ui/commit/33020beb36d22b34bb7ca7ae2d7f59272192211f)) ([6fde089](https://github.com/continew-org/continew-admin-ui/commit/6fde089ba62ea3b8659a872fa149bd517b7ab205)) ([921950b](https://github.com/continew-org/continew-admin-ui/commit/921950b7508befffe6d7414ff6d308340cb1004b)) (Gitee#23、24)
+* 新增分析页（拆分仪表盘路由为工作台和分析页） ([2e15cf2](https://github.com/continew-org/continew-admin-ui/commit/2e15cf2d48a8359b4e8455539da8149758db2db9)) ([455f269](https://github.com/continew-org/continew-admin-ui/commit/455f2695c836559f4f1d23d59b2b862691af1c8a)) ([8a3f456](https://github.com/continew-org/continew-admin-ui/commit/8a3f456e547b57c3405dac52c8bb40b20df79a94)) ([6e39681](https://github.com/continew-org/continew-admin-ui/commit/6e39681f960ff271e6df01a129bbc7ff211799bd)) ([abb6d59](https://github.com/continew-org/continew-admin-ui/commit/abb6d59783645785ac5611523329ad36a9b6631b)) ([798dda9](https://github.com/continew-org/continew-admin-ui/commit/798dda94407c8d6d106fa72621e09ee01c110dd1))
+* 重构工作台 ([7970940](https://github.com/continew-org/continew-admin-ui/commit/7970940f50791d81b793ceaebaaf9a68bc5d8e30)) ([b13f2ca](https://github.com/continew-org/continew-admin-ui/commit/b13f2ca91da004cb993a04fcb9f87004bb02b5c3)) ([fd1dfcf](https://github.com/continew-org/continew-admin-ui/commit/fd1dfcf3f484db0362dae58f6272b11573452451))
+* 使用 vue-office 重构文件预览（移除KKFileView） ([51aceac](https://github.com/continew-org/continew-admin-ui/commit/51aceac988fcdc4a5795bd8cc8dffd7dcc7f7c39)) (Gitee#25)
+* 公告支持设置通知范围，新增用户选择器组件 ([354b6bc](https://github.com/continew-org/continew-admin-ui/commit/354b6bc6d57c43951db512e9599549d32cdedc9c)) ([5ade6bc](https://github.com/continew-org/continew-admin-ui/commit/5ade6bcecf8c89ebc4260e7292cbbdfc5ac30fec)) ([233bd62](https://github.com/continew-org/continew-admin-ui/commit/233bd62babe6660193835b6bb30ae7d169b032ba)) ([84148b6](https://github.com/continew-org/continew-admin-ui/commit/84148b6a68d0701efc6efb900d1da4d7a6b49bd8)) ([5de731d](https://github.com/continew-org/continew-admin-ui/commit/5de731dab48eb38ca3430a6bcfd807ab36c17a7b)) (GitCode#1)
+* 角色管理增加分配角色功能 ([2f30df5](https://github.com/continew-org/continew-admin-ui/commit/2f30df528caaca664db24ddb80dd4dbb8a378b43)) ([449e512](https://github.com/continew-org/continew-admin-ui/commit/449e5128d74569cd74d0779a17cbcaf1d8390fe6)) (GitHub#33) 
+* 调整默认头像规则，由基于性别的固定头像调整为基于昵称展示（背景颜色基于昵称计算随机） ([00c909e](https://github.com/continew-org/continew-admin-ui/commit/00c909e6f1e1767e69024620e99f71f98f2cf474))
+* 新增能力开放模块应用管理功能 ([26291a1](https://github.com/continew-org/continew-admin-ui/commit/26291a1e444e3d63a5532e25bcaa4ea6a3d17125)) ([2b7c099](https://github.com/continew-org/continew-admin-ui/commit/2b7c09966fc3f8b059c4f587845149f5b1ea14c7)) (Gitee#27)
+* 新增 GiEditTable 编辑表格组件（同步 GiDemo 更新） ([b46235b](https://github.com/continew-org/continew-admin-ui/commit/b46235b7ede5991d3582e68db9ab65515867798e))
+* GiTable 表格组件插槽支持插槽类型提示（同步 GiDemo 更新） ([88864d8](https://github.com/continew-org/continew-admin-ui/commit/88864d8c5df55941a50ef23ac2c3d1030b61b47f))
+* tab栏增加右键菜单 Closes #IA5RD4 ([169a304](https://github.com/continew-org/continew-admin-ui/commit/169a3049c479bd001e5cb5cff4eb20010e3c66ad)) (Gitee#31)
+* 用户管理新增分配角色功能 ([3b74b5c](https://github.com/continew-org/continew-admin-ui/commit/3b74b5c7bfc9617f55565800349f4be51712e805))
+
+### 💎 功能优化
+
+- 完善部分限制字数输入框的限制提示 ([bb246f4](https://github.com/continew-org/continew-admin-ui/commit/bb246f45289f8899ebd5d2dfe1d5bc3be5ba880a))
+- 优化公告相关样式 ([5ebdaa0](https://github.com/continew-org/continew-admin-ui/commit/5ebdaa045391c14fbc3456d18f5f1320123e5032)) ([33bf31b](https://github.com/continew-org/continew-admin-ui/commit/33bf31b048638b5a64a7acc3d8eb1e790cd38fa2))
+- 重构部门管理、菜单管理树列表过滤（前端过滤） ([d881b93](https://github.com/continew-org/continew-admin-ui/commit/d881b93c7814d6cd92fb81717ab690dd1ac8c732))
+- 优化表格工具栏样式 ([ff87940](https://github.com/continew-org/continew-admin-ui/commit/ff879405d76e91c2985536540ff49081e5e631b4))
+- 重构用户管理搜索栏（支持多条件展开及折叠） ([50a6d17](https://github.com/continew-org/continew-admin-ui/commit/50a6d17516ab214d2b198b57c4b014360bc596ed)) ([84ad0d5](https://github.com/continew-org/continew-admin-ui/commit/84ad0d55b025fa96c2d83d732b87a496273abe1c))
+- 优化表格 slot 命名 ([6a77168](https://github.com/continew-org/continew-admin-ui/commit/6a771686454917324604b1b456a27a96227229ed))
+- 优化部分代码 ([1382346](https://github.com/continew-org/continew-admin-ui/commit/13823461d2d0175be1ed37f0a4a5f40f7c055160)) ([f650a6f](https://github.com/continew-org/continew-admin-ui/commit/f650a6f3aedd529e1c7e27fec50cfcca580918fe)) ([ce09f73](https://github.com/continew-org/continew-admin-ui/commit/ce09f737c3f8e8c8e0bcd834c8fbef0cc664be65)) ([4edbe54](https://github.com/continew-org/continew-admin-ui/commit/4edbe54fe37f49fda0b4a5eed16916db02742c43)) ([0bd0ff5](https://github.com/continew-org/continew-admin-ui/commit/0bd0ff5e21c11af30c5188d45ce4896faaebcf0c))
+- 调整新增字典按钮位置 ([47a5c44](https://github.com/continew-org/continew-admin-ui/commit/47a5c448895cd5bc793c0f6c9baf5cf15c3c1297))
+- 调整字典的操作菜单弹出方式，由右键弹出调整为点击更多按钮弹出 ([e29cf88](https://github.com/continew-org/continew-admin-ui/commit/e29cf88d1c7ea8115819eb528cbeb9c4e5a6d6ba)) ([795932e](https://github.com/continew-org/continew-admin-ui/commit/795932e440737e060c536726d0d3e81f89966ab1))
+- 优化 GiForm 组件代码（同步 GiDemo 更新） ([ad31d9f](https://github.com/continew-org/continew-admin-ui/commit/ad31d9f2ffe9372f6bc5108b305086a700ca61de)) ([ae08678](https://github.com/continew-org/continew-admin-ui/commit/ae08678fa103850ba63d3bfeb70033e9f0f4c5ff))
+- 优化部分链接样式 ([c6daf41](https://github.com/continew-org/continew-admin-ui/commit/c6daf41a2e418454b873c67252eed2f808b68bd3))
+- GiForm 组件替换为 Grid 布局（同步 GiDemo 更新） ([4b90247](https://github.com/continew-org/continew-admin-ui/commit/4b902475dd5e1894329ca00d2d50f12e304856c0))
+- 默认选中第一个字典 ([34d4faa](https://github.com/continew-org/continew-admin-ui/commit/34d4faa0903288aa7e71604f832cd1a04864790c))
+- 调整 eslint.config.js，优化代码格式 ([9e5dff1](https://github.com/continew-org/continew-admin-ui/commit/9e5dff144b31d39f479bd7d377338323c8551ffb))
+- 优化导入用户部分界面及接口路径 ([881c7e7](https://github.com/continew-org/continew-admin-ui/commit/881c7e720e5a753115a4121276333ff121a8d741))
+- 文件管理、分析页、代码生成等部分组件调整为异步加载 ([2caedd1](https://github.com/continew-org/continew-admin-ui/commit/2caedd165f55b577c921a6527132666e2c9a48a0)) (Gitee#29)
+- 重构代码生成列表 ([293718f](https://github.com/continew-org/continew-admin-ui/commit/293718f670d3e214acced99db2eaf48b35856e45))
+- 调整 html lang="en" 为 zh-CN ([cefb954](https://github.com/continew-org/continew-admin-ui/commit/cefb95479113a1cace7f075d2045048d84716780)) (Gitee#33)
+- 调整查询系统配置参数接口地址 ([0116432](https://github.com/continew-org/continew-admin-ui/commit/011643226cbc88651665c01b2a7b84d58f2f1176))
+- 进度条由请求时调整为切换路由显示 ([f702e03](https://github.com/continew-org/continew-admin-ui/commit/f702e03124199b004fe77b7c1c34f01f711b1ed5))
+
+### 🐛 问题修复
+
+- 消除控制台 Sass 警告 ([e2fe1ab](https://github.com/continew-org/continew-admin-ui/commit/e2fe1ab814e80da4bf641710826ec062c0168392)) (Gitee#20)
+- 修复定时任务不显示堆栈异常的情况 ([44ef909](https://github.com/continew-org/continew-admin-ui/commit/44ef90917f28217ae1db151bbfa46380d1d1fd34)) (Gitee#22)
+- 在useTable选项中将paginationOption设置为可选 ([07294cc](https://github.com/continew-org/continew-admin-ui/commit/07294cce14c5a77de1b4e7f9a40f25951978bc97)) (Gitee#22)
+- 修复tab页只剩一个的时候无法关闭的问题 ([0594ae9](https://github.com/continew-org/continew-admin-ui/commit/0594ae91c74fbc19c0bd7ccd2ad6f7f67597d32a))
+- 修复系统名太长会使菜单栏右侧黑边过长的问题 ([d1d29df](https://github.com/continew-org/continew-admin-ui/commit/d1d29dfce64abeee08ac924e64ec38950ccd0da6))
+- 固定vue-tsc版本，避免typescript5.0.4版本冲突 ([2648497](https://github.com/continew-org/continew-admin-ui/commit/2648497f2acc90c76f4246b5c7e249b8277559e7)) (GitHub#28)
+- 修复主页公告弹窗MD显示 ([40bfcd5](https://github.com/continew-org/continew-admin-ui/commit/40bfcd5f0d6a8019b2ded0730145d944970cb314)) (GitHub#29)
+- 修复搜索图标不生效,并支持模糊搜索 ([6e9b322](https://github.com/continew-org/continew-admin-ui/commit/6e9b32295dc8270e18716b6d7918fe20b6d40d06)) (GitHub#30)
+- 修复选择上级菜单过滤失效的问题 ([777f371](https://github.com/continew-org/continew-admin-ui/commit/777f371ffcf763b5f5a958a9e7fad1bd2737d275))
+- 修复了开发环境下，点击使用了GiTable菜单自动刷新页面的问题 ([20bbf6c](https://github.com/continew-org/continew-admin-ui/commit/20bbf6c6af8c755af84806c675e40951a55fb6a9)) (Gitee#26)
+- 修复获取短信、邮箱验证码缺失行为验证码参数错误 ([1cb0172](https://github.com/continew-org/continew-admin-ui/commit/1cb01720589cba3f8944eebb35457d30ee4658f8))
+- 修复浏览器控制台报错 ([880fb1d](https://github.com/continew-org/continew-admin-ui/commit/880fb1d55d3a7e91f54dd9840f26f0e4c44fbc06))
+- 优化部分表格列宽度样式 ([b908f14](https://github.com/continew-org/continew-admin-ui/commit/b908f14b33c1578ac6da88fb6c74b762b4197664))
+- 修复公告显示及详情页跳转错误 ([6b265f7](https://github.com/continew-org/continew-admin-ui/commit/6b265f74bba52647470bd63f7c82968f2d988c41))
+- 还原滚动条样式 ([8568ac1](https://github.com/continew-org/continew-admin-ui/commit/8568ac1a2ea2e7e8287ee04d6f7361c54b578d96))
+- 补充重构邮箱登录后遗漏的行为验证码 ([2735dcf](https://github.com/continew-org/continew-admin-ui/commit/2735dcf93921c738ee8ffb375d37b2d81ae5121f))
+
 ## [v3.3.0](https://github.com/continew-org/continew-admin-ui/compare/v3.2.0...v3.3.0) (2024-09-09)
 
 ### ✨ 新特性

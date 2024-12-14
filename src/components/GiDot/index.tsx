@@ -7,14 +7,14 @@ export default defineComponent({
   props: {
     animation: {
       type: Boolean,
-      default: true
+      default: true,
     },
     type: {
       type: String as PropType<TPropsType>,
-      default: 'primary'
-    }
+      default: 'primary',
+    },
   },
   setup(props) {
     return () => <span class={['gi-dot', { 'gi-dot-processing': props.animation }, `gi-dot-${props.type}`]}></span>
-  }
+  },
 })

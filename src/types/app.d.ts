@@ -1,20 +1,22 @@
 declare namespace App {
-  /** 系统配置 */
-  interface SettingConfig {
-    theme: 'light' | 'dark' // 主题
-    themeColor: string // 主题色
-    tab: boolean // 是否显示页签
-    tabMode: TabType // 页签风格
-    animate: boolean // 是否显示动画
-    animateMode: AnimateType // 动画类名
-    menuCollapse: boolean // 左侧菜单折叠状态
-    menuAccordion: boolean // 左侧菜单手风琴效果
-    copyrightDisplay: boolean // 是否显示底部版权信息
-    menuDark: boolean // 菜单深色模式
+  interface AppSettings {
+    theme: 'light' | 'dark'
+    themeColor: string
+    tab: boolean
+    tabMode: 'card' | 'card-gutter' | 'rounded'
+    animate: boolean
+    animateMode: 'zoom-fade' | 'slide-dynamic-origin' | 'fade-slide' | 'fade' | 'fade-bottom' | 'fade-scale'
+    menuCollapse: boolean
+    menuAccordion: boolean
+    menuDark: boolean
+    copyrightDisplay: boolean
     layout: 'left' | 'mix'
-    isOpenWatermark: boolean // 是否开启水印
-    watermark: string // 水印
+    isOpenWatermark?: boolean
+    watermark?: string
+    enableColorWeaknessMode?: boolean
+    enableMourningMode?: boolean
   }
+
   /** 导航页签的样式类型 */
   type TabType = 'card' | 'card-gutter' | 'rounded'
   interface TabItem {

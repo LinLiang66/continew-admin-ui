@@ -51,42 +51,43 @@
   </a-drawer>
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import { useWindowSize } from '@vueuse/core'
-import { type RoleDetailResp, getRole } from '@/apis/system'
+import { type RoleDetailResp, getRole as getDetail } from '@/apis/system/role'
 import { useDept, useDict, useMenu } from '@/hooks/app'
 
 const { width } = useWindowSize()
+
+const dataId = ref('')
+const dataDetail = ref<RoleDetailResp>()
+const visible = ref(false)
 const { data_scope_enum } = useDict('data_scope_enum')
 const { deptList, getDeptList } = useDept()
 const { menuList, getMenuList } = useMenu()
 
-const dataId = ref('')
-const dataDetail = ref<RoleDetailResp>()
 // 查询详情
 const getDataDetail = async () => {
-  const res = await getRole(dataId.value)
-  dataDetail.value = res.data
+  const { data } = await getDetail(dataId.value)
+  dataDetail.value = data
 }
 
-const visible = ref(false)
-// 详情
-const onDetail = async (id: string) => {
+// 打开
+const onOpen = async (id: string) => {
+  dataId.value = id
   if (!menuList.value.length) {
     await getMenuList()
   }
   if (!deptList.value.length) {
     await getDeptList()
   }
-  dataId.value = id
   await getDataDetail()
   visible.value = true
 }
 
-defineExpose({ onDetail })
+defineExpose({ onOpen })
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .permission :deep(.arco-descriptions-item-label-block) {
   padding-right: 0;
 }

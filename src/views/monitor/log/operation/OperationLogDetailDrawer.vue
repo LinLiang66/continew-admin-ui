@@ -67,30 +67,30 @@
   </a-drawer>
 </template>
 
-<script lang="ts" setup>
-import { type LogDetailResp, getLog } from '@/apis/monitor'
+<script setup lang="ts">
+import { type LogDetailResp, getLog as getData } from '@/apis/monitor'
 
 const dataId = ref('')
 const dataDetail = ref<LogDetailResp>()
+const visible = ref(false)
 
 // 查询详情
 const getDataDetail = async () => {
-  const res = await getLog(dataId.value)
-  dataDetail.value = res.data
+  const { data } = await getData(dataId.value)
+  dataDetail.value = data
 }
 
-const visible = ref(false)
-// 详情
-const onDetail = async (id: string) => {
+// 打开
+const onOpen = async (id: string) => {
   dataId.value = id
   await getDataDetail()
   visible.value = true
 }
 
-defineExpose({ onDetail })
+defineExpose({ onOpen })
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .http :deep(.arco-descriptions-item-label-block) {
   padding-right: 0;
 }

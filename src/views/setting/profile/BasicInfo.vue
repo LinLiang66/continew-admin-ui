@@ -11,10 +11,9 @@
           :on-before-upload="onBeforeUpload"
         >
           <template #upload-button>
-            <a-avatar :size="100">
+            <Avatar :src="avatarList[0].url" :name="userStore.nickname" :size="100" trigger>
               <template #trigger-icon><icon-camera /></template>
-              <img v-if="avatarList.length" :src="avatarList[0].url" alt="avatar" />
-            </a-avatar>
+            </Avatar>
           </template>
         </a-upload>
         <div class="name">
@@ -111,7 +110,7 @@ const userInfo = computed(() => userStore.userInfo)
 const avatar = {
   uid: '-2',
   name: 'avatar.png',
-  url: userInfo.value.avatar
+  url: userInfo.value.avatar,
 }
 const avatarList = ref<FileItem[]>([avatar])
 const fileRef = ref(reactive({ name: 'avatar.png' }))
@@ -126,7 +125,7 @@ const options: cropperOptions = reactive({
   centerBox: true,
   canMove: true,
   outputSize: 1,
-  outputType: 'png'
+  outputType: 'png',
 })
 const visible = ref(false)
 // 打开裁剪框
@@ -158,7 +157,7 @@ const handleRealTime = (data: any) => {
     overflow: 'hidden',
     margin: '0',
     zoom: 100 / data.h,
-    borderRadius: '50%'
+    borderRadius: '50%',
   }
   previews.value = data
 }

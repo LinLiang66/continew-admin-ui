@@ -6,7 +6,7 @@ export type * from './type'
 const BASE_URL = '/system/dict'
 
 /** @desc 查询字典列表 */
-export function listDict(query: T.DictQuery) {
+export function listDict(query?: T.DictQuery) {
   return http.get<T.DictResp[]>(`${BASE_URL}/list`, query)
 }
 

@@ -9,7 +9,7 @@
   />
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import CodeMirror from 'vue-codemirror6'
 import { javascript } from '@codemirror/lang-javascript'
 import { vue } from '@codemirror/lang-vue'
@@ -19,7 +19,7 @@ import { useAppStore } from '@/stores'
 
 const props = withDefaults(defineProps<Props>(), {
   type: 'javascript',
-  codeJson: ''
+  codeJson: '',
 })
 const appStore = useAppStore()
 const isDark = computed(() => appStore.theme === 'dark')
@@ -32,7 +32,7 @@ const defaultConfig = {
   tabSize: 2,
   basic: true,
   dark: true,
-  readonly: true
+  readonly: true,
 }
 const config = defaultConfig
 
@@ -50,7 +50,7 @@ const extensions = computed(() => {
 })
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 :deep(.ͼ1 .cm-scroller) {
   font-family: source-code-pro, Menlo, Monaco, Consolas, Courier New, monospace;
 }

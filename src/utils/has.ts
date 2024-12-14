@@ -48,5 +48,5 @@ export default {
   /** 验证用户是否含有指定角色，必须全部拥有 */
   hasRoleAnd(roles: string[]) {
     return roles.every((item) => authRole(item))
-  }
+  },
 }

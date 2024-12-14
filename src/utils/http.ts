@@ -1,16 +1,12 @@
 import axios from 'axios'
 import qs from 'query-string'
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
-import NProgress from 'nprogress'
 import { useUserStore } from '@/stores'
 import { getToken } from '@/utils/auth'
 import modalErrorWrapper from '@/utils/modal-error-wrapper'
 import messageErrorWrapper from '@/utils/message-error-wrapper'
 import notificationErrorWrapper from '@/utils/notification-error-wrapper'
-import 'nprogress/nprogress.css'
 import router from '@/router'
-
-NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
 interface ICodeMessage {
   [propName: number]: string
@@ -30,18 +26,17 @@ const StatusCodeMessage: ICodeMessage = {
   501: '服务未实现(501)',
   502: '网络错误(502)',
   503: '服务不可用(503)',
-  504: '网络超时(504)'
+  504: '网络超时(504)',
 }
 
 const http: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_PREFIX ?? import.meta.env.VITE_API_BASE_URL,
-  timeout: 30 * 1000
+  timeout: 30 * 1000,
 })
 
 // 请求拦截器
 http.interceptors.request.use(
   (config: AxiosRequestConfig) => {
-    NProgress.start() // 进度条
     const token = getToken()
     if (token) {
       if (!config.headers) {
@@ -53,7 +48,7 @@ http.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error)
-  }
+  },
 )
 
 // 响应拦截器
@@ -62,12 +57,10 @@ http.interceptors.response.use(
     const { data } = response
     const { success, code, msg } = data
     if (response.request.responseType === 'blob') {
-      NProgress.done()
       return response
     }
     // 成功
     if (success) {
-      NProgress.done()
       return response
     }
 
@@ -80,19 +73,17 @@ http.interceptors.response.use(
         escToClose: false,
         okText: '重新登录',
         async onOk() {
-          NProgress.done()
           const userStore = useUserStore()
-          userStore.logoutCallBack()
-          router.replace('/login')
-        }
+          await userStore.logoutCallBack()
+          await router.replace('/login')
+        },
       })
     } else {
-      NProgress.done()
       // 如果错误信息长度过长，使用 Notification 进行提示
       if (msg.length <= 15) {
         messageErrorWrapper({
           content: msg || '服务器端错误',
-          duration: 5 * 1000
+          duration: 5 * 1000,
         })
       } else {
         notificationErrorWrapper(msg || '服务器端错误')
@@ -101,16 +92,14 @@ http.interceptors.response.use(
     return Promise.reject(new Error(msg || '服务器端错误'))
   },
   (error) => {
-    NProgress.done()
     const response = Object.assign({}, error.response)
     response
     && messageErrorWrapper({
       content: StatusCodeMessage[response.status] || '服务器暂时未响应，请刷新页面并重试。若无法解决，请联系管理员',
-      duration: 5 * 1000
+      duration: 5 * 1000,
     })
-    console.log(response.status)
     return Promise.reject(error)
-  }
+  },
 )
 
 const request = <T = unknown>(config: AxiosRequestConfig): Promise<ApiRes<T>> => {
@@ -139,7 +128,7 @@ const get = <T = any>(url: string, params?: object, config?: AxiosRequestConfig)
     paramsSerializer: (obj) => {
       return qs.stringify(obj)
     },
-    ...config
+    ...config,
   })
 }
 
@@ -148,7 +137,7 @@ const post = <T = any>(url: string, params?: object, config?: AxiosRequestConfig
     method: 'post',
     url,
     data: params,
-    ...config
+    ...config,
   })
 }
 
@@ -157,7 +146,7 @@ const put = <T = any>(url: string, params?: object, config?: AxiosRequestConfig)
     method: 'put',
     url,
     data: params,
-    ...config
+    ...config,
   })
 }
 
@@ -166,7 +155,7 @@ const patch = <T = any>(url: string, params?: object, config?: AxiosRequestConfi
     method: 'patch',
     url,
     data: params,
-    ...config
+    ...config,
   })
 }
 
@@ -175,7 +164,7 @@ const del = <T = any>(url: string, params?: object, config?: AxiosRequestConfig)
     method: 'delete',
     url,
     data: params,
-    ...config
+    ...config,
   })
 }
 const download = (url: string, params?: object, config?: AxiosRequestConfig): Promise<AxiosResponse> => {
@@ -187,7 +176,7 @@ const download = (url: string, params?: object, config?: AxiosRequestConfig): Pr
     paramsSerializer: (obj) => {
       return qs.stringify(obj)
     },
-    ...config
+    ...config,
   })
 }
 export default { get, post, put, patch, del, request, requestNative, download }

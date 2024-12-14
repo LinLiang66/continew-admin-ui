@@ -28,7 +28,7 @@ const directive: Directive = {
   },
   updated(el: HTMLElement, binding: DirectiveBinding) {
     checkRole(el, binding)
-  }
+  },
 }
 
 export default directive

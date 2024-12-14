@@ -53,8 +53,8 @@ export default defineComponent({
   props: useFormProps({
     defaultValue: '*',
     props: {
-      week: { type: String, default: '?' }
-    }
+      week: { type: String, default: '?' },
+    },
   }),
   emits: useFromEmits(),
   setup(props, context) {
@@ -68,21 +68,21 @@ export default defineComponent({
       maxValue: 31,
       valueRange: { start: 1, end: 31 },
       valueLoop: { start: 1, interval: 1 },
-      disabled: isDisabled
+      disabled: isDisabled,
     })
     const typeWorkAttrs = computed(() => ({
       disabled: setup.type.value !== TypeEnum.work || props.disabled || isDisabled.value,
-      ...setup.inputNumberAttrs.value
+      ...setup.inputNumberAttrs.value,
     }))
 
     watch(
       () => props.week,
       () => {
         setup.updateValue(isDisabled.value ? '?' : setup.computeValue.value)
-      }
+      },
     )
 
     return { ...setup, typeWorkAttrs }
-  }
+  },
 })
 </script>

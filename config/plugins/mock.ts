@@ -12,6 +12,6 @@ export default function createMock(env, isBuild) {
     injectCode: `
           import { setupProdMockServer } from '../src/mock/index';
           setupProdMockServer();
-        `
+        `,
   })
 }

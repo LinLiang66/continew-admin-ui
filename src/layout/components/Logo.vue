@@ -10,7 +10,7 @@
 import { useAppStore } from '@/stores'
 
 const props = withDefaults(defineProps<Props>(), {
-  collapsed: false
+  collapsed: false,
 })
 const appStore = useAppStore()
 const title = computed(() => appStore.getTitle())
@@ -26,7 +26,7 @@ const toHome = () => {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .system-logo {
   height: 56px;
   padding: 0 12px;

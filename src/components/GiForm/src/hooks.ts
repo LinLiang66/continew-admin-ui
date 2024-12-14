@@ -43,6 +43,6 @@ export function useGiForm(initValue: Columns) {
     /** 设置 columns 某个对象属性的值 */
     setValue,
     /** 设置 columns.props 某个属性的值 */
-    setPropsValue
+    setPropsValue,
   }
 }

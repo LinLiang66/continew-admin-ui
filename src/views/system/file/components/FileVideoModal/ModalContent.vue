@@ -2,7 +2,7 @@
   <div id="videoId"></div>
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import Player from 'xgplayer'
 import type { FileItem } from '@/apis/system'
 
@@ -18,9 +18,9 @@ onMounted(() => {
     lang: 'zh-cn',
     autoplay: true,
     closeVideoClick: true,
-    videoInit: true
+    videoInit: true,
   })
 })
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped lang="scss"></style>

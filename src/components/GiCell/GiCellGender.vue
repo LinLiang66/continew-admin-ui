@@ -12,11 +12,11 @@
   </a-tag>
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 defineOptions({ name: 'GiCellGender' })
 
 const props = withDefaults(defineProps<Props>(), {
-  gender: 1
+  gender: 1,
 })
 
 interface Props {
@@ -24,4 +24,4 @@ interface Props {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped lang="scss"></style>

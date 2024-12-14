@@ -44,7 +44,7 @@ import { useFormProps, useFormSetup, useFromEmits } from './use-mixin'
 export default defineComponent({
   name: 'HourForm',
   props: useFormProps({
-    defaultValue: '*'
+    defaultValue: '*',
   }),
   emits: useFromEmits(),
   setup(props, context) {
@@ -53,8 +53,8 @@ export default defineComponent({
       minValue: 0,
       maxValue: 23,
       valueRange: { start: 0, end: 23 },
-      valueLoop: { start: 0, interval: 1 }
+      valueLoop: { start: 0, interval: 1 },
     })
-  }
+  },
 })
 </script>

@@ -8,7 +8,7 @@ export enum TypeEnum {
   loop = 'LOOP',
   work = 'WORK',
   last = 'LAST',
-  specify = 'SPECIFY'
+  specify = 'SPECIFY',
 }
 
 // 周定义
@@ -19,7 +19,7 @@ export const WEEK_MAP: any = {
   4: '周三',
   5: '周四',
   6: '周五',
-  7: '周六'
+  7: '周六',
 }
 
 // use 公共 props
@@ -28,13 +28,13 @@ export function useFormProps(options: any) {
   return {
     modelValue: {
       type: String,
-      default: defaultValue
+      default: defaultValue,
     },
     disabled: {
       type: Boolean,
-      default: false
+      default: false,
     },
-    ...options?.props
+    ...options?.props,
   }
 }
 
@@ -166,7 +166,7 @@ export function useFormSetup(props: any, context: any, options: any) {
   const beforeRadioAttrs = computed(() => ({
     class: ['choice'],
     disabled: props.disabled || unref(options.disabled),
-    size: 'small'
+    size: 'small',
   }))
 
   // 输入框属性
@@ -176,26 +176,26 @@ export function useFormSetup(props: any, context: any, options: any) {
     precision: 0,
     size: 'small',
     hideButton: true,
-    class: 'w60'
+    class: 'w60',
   }))
 
   // 区间属性
   const typeRangeAttrs = computed(() => ({
     disabled: type.value !== TypeEnum.range || props.disabled || unref(options.disabled),
-    ...inputNumberAttrs.value
+    ...inputNumberAttrs.value,
   }))
 
   // 间隔属性
   const typeLoopAttrs = computed(() => ({
     disabled: type.value !== TypeEnum.loop || props.disabled || unref(options.disabled),
-    ...inputNumberAttrs.value
+    ...inputNumberAttrs.value,
   }))
 
   // 指定属性
   const typeSpecifyAttrs = computed(() => ({
     disabled: type.value !== TypeEnum.specify || props.disabled || unref(options.disabled),
     class: ['list-check-item'],
-    size: 'small'
+    size: 'small',
   }))
 
   return {
@@ -215,6 +215,6 @@ export function useFormSetup(props: any, context: any, options: any) {
     inputNumberAttrs,
     typeRangeAttrs,
     typeLoopAttrs,
-    typeSpecifyAttrs
+    typeSpecifyAttrs,
   }
 }

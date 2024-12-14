@@ -25,7 +25,7 @@ const props = withDefaults(defineProps<Props>(), {
   icon: '',
   label: '',
   more: false,
-  active: false
+  active: false,
 })
 
 const emit = defineEmits<{
@@ -44,7 +44,7 @@ const handleClick = () => {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .gi-option-item {
   padding: 0 5px 0 10px;
   height: 34px;

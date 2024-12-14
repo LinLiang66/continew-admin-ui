@@ -63,7 +63,7 @@ const initData = () => {
         subtitle: `${socialList.value.includes('GITEE') ? '' : '绑定后，'}可通过 Gitee 进行登录`,
         jumpMode: 'link',
         type: 'gitee',
-        status: socialList.value.includes('GITEE')
+        status: socialList.value.includes('GITEE'),
       },
       {
         title: '绑定 GitHub',
@@ -71,8 +71,8 @@ const initData = () => {
         subtitle: `${socialList.value.includes('GITHUB') ? '' : '绑定后，'}可通过 GitHub 进行登录`,
         type: 'github',
         jumpMode: 'link',
-        status: socialList.value.includes('GITHUB')
-      }
+        status: socialList.value.includes('GITHUB'),
+      },
     ]
   })
 }
@@ -102,4 +102,4 @@ onMounted(() => {
 })
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped lang="scss"></style>

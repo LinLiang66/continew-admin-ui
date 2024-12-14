@@ -1,8 +1,8 @@
 <template>
   <div v-show="showBox" :class="mode === 'pop' ? 'mask' : ''">
     <div
-        :class="mode === 'pop' ? 'verifybox' : ''"
-        :style="{ 'max-width': `${parseInt(imgSize.width) + 30}px` }"
+      :class="mode === 'pop' ? 'verifybox' : ''"
+      :style="{ 'max-width': `${parseInt(imgSize.width) + 30}px` }"
     >
       <div v-if="mode === 'pop'" class="verifybox-top">
         请完成安全验证
@@ -11,24 +11,25 @@
         </span>
       </div>
       <div
-          class="verifybox-bottom"
-          :style="{ padding: mode === 'pop' ? '15px' : '0' }"
+        class="verifybox-bottom"
+        :style="{ padding: mode === 'pop' ? '15px' : '0' }"
       >
         <!-- 验证码容器 -->
+        <!-- eslint-disable-next-line vue/no-restricted-v-bind -->
         <component
-            :is="componentType"
-            v-if="componentType"
-            ref="instance"
-            :captcha-type="captchaType"
-            :type="verifyType"
-            :figure="figure"
-            :arith="arith"
-            :mode="mode"
-            :v-space="vSpace"
-            :explain="explain"
-            :img-size="imgSize"
-            :block-size="blockSize"
-            :bar-size="barSize"
+          :is="componentType"
+          v-if="componentType"
+          ref="instance"
+          :space="space"
+          :captcha-type="captchaType"
+          :type="verifyType"
+          :figure="figure"
+          :arith="arith"
+          :mode="mode"
+          :explain="explain"
+          :img-size="imgSize"
+          :block-size="blockSize"
+          :bar-size="barSize"
         ></component>
       </div>
     </div>
@@ -44,44 +45,44 @@ export default {
   name: 'Vue2Verify',
   components: {
     VerifySlide,
-    VerifyPoints
+    VerifyPoints,
   },
   props: {
     captchaType: {
       type: String,
-      required: true
+      required: true,
     },
     figure: {
-      type: Number
+      type: Number,
     },
     arith: {
-      type: Number
+      type: Number,
     },
     mode: {
       type: String,
-      default: 'pop'
+      default: 'pop',
     },
-    vSpace: {
-      type: Number
+    space: {
+      type: Number,
     },
     explain: {
-      type: String
+      type: String,
     },
     imgSize: {
       type: Object,
       default() {
         return {
           width: '310px',
-          height: '155px'
+          height: '155px',
         }
-      }
+      },
     },
     blockSize: {
-      type: Object
+      type: Object,
     },
     barSize: {
-      type: Object
-    }
+      type: Object,
+    },
   },
   setup(props) {
     const { captchaType, mode } = toRefs(props)
@@ -135,9 +136,9 @@ export default {
       instance,
       showBox,
       closeBox,
-      show
+      show,
     }
-  }
+  },
 }
 </script>
 

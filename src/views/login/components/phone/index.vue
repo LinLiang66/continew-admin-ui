@@ -25,38 +25,38 @@
     </a-form-item>
     <a-form-item>
       <a-space direction="vertical" fill class="w-full">
-        <a-button disabled class="btn" type="primary" :loading="loading" html-type="submit" size="large" long>立即登录</a-button
-        >
+        <a-button disabled class="btn" type="primary" :loading="loading" html-type="submit" size="large" long>立即登录</a-button>
       </a-space>
     </a-form-item>
+    <Verify
+      ref="VerifyRef"
+      :captcha-type="captchaType"
+      :mode="captchaMode"
+      :img-size="{ width: '330px', height: '155px' }"
+      @success="getCaptcha"
+    />
   </a-form>
-  <Verify
-    ref="VerifyRef"
-    :captcha-type="captchaType"
-    :mode="captchaMode"
-    :img-size="{ width: '330px', height: '155px' }"
-    @success="getCaptcha"
-  />
 </template>
 
 <script setup lang="ts">
-// import { getSmsCaptcha } from '@/apis'
 import { type FormInstance, Message } from '@arco-design/web-vue'
+import type { BehaviorCaptchaReq } from '@/apis'
+// import { type BehaviorCaptchaReq, getSmsCaptcha } from '@/apis'
 import { useTabsStore, useUserStore } from '@/stores'
 import * as Regexp from '@/utils/regexp'
 
 const formRef = ref<FormInstance>()
 const form = reactive({
   phone: '',
-  captcha: ''
+  captcha: '',
 })
 
 const rules: FormInstance['rules'] = {
   phone: [
     { required: true, message: '请输入手机号' },
-    { match: Regexp.Phone, message: '请输入正确的手机号' }
+    { match: Regexp.Phone, message: '请输入正确的手机号' },
   ],
-  captcha: [{ required: true, message: '请输入验证码' }]
+  captcha: [{ required: true, message: '请输入验证码' }],
 }
 
 const userStore = useUserStore()
@@ -72,11 +72,11 @@ const handleLogin = async () => {
     await userStore.phoneLogin(form)
     tabsStore.reset()
     const { redirect, ...othersQuery } = router.currentRoute.value.query
-    router.push({
+    await router.push({
       path: (redirect as string) || '/',
       query: {
-        ...othersQuery
-      }
+        ...othersQuery,
+      },
     })
     Message.success('欢迎使用')
   } catch (error) {
@@ -95,6 +95,8 @@ const onCaptcha = async () => {
   if (captchaLoading.value) return
   const isInvalid = await formRef.value?.validateField('phone')
   if (isInvalid) return
+  // 重置行为参数
+  VerifyRef.value.instance.refresh()
   VerifyRef.value.show()
 }
 
@@ -111,13 +113,12 @@ const resetCaptcha = () => {
 }
 
 // 获取验证码
-const getCaptcha = async () => {
+// eslint-disable-next-line unused-imports/no-unused-vars
+const getCaptcha = async (captchaReq: BehaviorCaptchaReq) => {
   try {
     captchaLoading.value = true
     captchaBtnName.value = '发送中...'
-    // await getSmsCaptcha({
-    //   phone: form.phone
-    // })
+    // await getSmsCaptcha(form.phone, captchaReq)
     captchaLoading.value = false
     captchaDisable.value = true
     captchaBtnName.value = `获取验证码(${(captchaTime.value -= 1)}s)`
@@ -138,7 +139,7 @@ const getCaptcha = async () => {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .arco-input-wrapper,
 :deep(.arco-select-view-single) {
   height: 40px;

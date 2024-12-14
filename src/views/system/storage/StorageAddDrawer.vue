@@ -1,12 +1,12 @@
 <template>
   <a-drawer
-      v-model:visible="visible"
-      :title="title"
-      :mask-closable="false"
-      :esc-to-close="false"
-      :width="width >= 600 ? 600 : '100%'"
-      @before-ok="save"
-      @close="reset"
+    v-model:visible="visible"
+    :title="title"
+    :mask-closable="false"
+    :esc-to-close="false"
+    :width="width >= 600 ? 600 : '100%'"
+    @before-ok="save"
+    @close="reset"
   >
     <a-form ref="formRef" :model="form" :rules="rules" size="large" auto-label-width>
       <a-form-item label="名称" field="name">
@@ -23,9 +23,9 @@
       </a-form-item>
       <a-form-item v-if="form.type === 1" label="私有密钥" field="secretKey">
         <a-input
-            v-model.trim="form.secretKey"
-            placeholder="请输入私有密钥"
-            :max-length="255"
+          v-model.trim="form.secretKey"
+          placeholder="请输入私有密钥"
+          :max-length="255"
         />
       </a-form-item>
       <a-form-item v-if="form.type === 1" label="终端节点" field="endpoint">
@@ -43,10 +43,10 @@
         </template>
       </a-form-item>
       <a-form-item
-          v-if="form.type === 2"
-          label="域名"
-          field="domain"
-          :rules="[
+        v-if="form.type === 2"
+        label="域名"
+        field="domain"
+        :rules="[
           {
             required: true,
             message: '请输入域名',
@@ -60,31 +60,31 @@
       </a-form-item>
       <a-form-item label="描述" field="description">
         <a-textarea
-            v-model.trim="form.description"
-            placeholder="请输入描述"
-            show-word-limit
-            :max-length="200"
-            :auto-size="{ minRows: 3, maxRows: 5 }"
+          v-model.trim="form.description"
+          placeholder="请输入描述"
+          show-word-limit
+          :max-length="200"
+          :auto-size="{ minRows: 3, maxRows: 5 }"
         />
       </a-form-item>
       <a-form-item label="默认存储" field="isDefault">
         <a-switch
-            v-model="form.isDefault"
-            type="round"
-            :checked-value="true"
-            :unchecked-value="false"
-            checked-text="是"
-            unchecked-text="否"
+          v-model="form.isDefault"
+          type="round"
+          :checked-value="true"
+          :unchecked-value="false"
+          checked-text="是"
+          unchecked-text="否"
         />
       </a-form-item>
       <a-form-item label="状态" field="status">
         <a-switch
-            v-model="form.status"
-            type="round"
-            :checked-value="1"
-            :unchecked-value="2"
-            checked-text="启用"
-            unchecked-text="禁用"
+          v-model="form.status"
+          type="round"
+          :checked-value="1"
+          :unchecked-value="2"
+          checked-text="启用"
+          unchecked-text="禁用"
         />
       </a-form-item>
     </a-form>
@@ -94,8 +94,8 @@
 <script setup lang="ts">
 import { type FormInstance, Message } from '@arco-design/web-vue'
 import { useWindowSize } from '@vueuse/core'
-import { addStorage, getStorage, updateStorage } from '@/apis/system'
-import { useForm } from '@/hooks'
+import { addStorage, getStorage, updateStorage } from '@/apis/system/storage'
+import { useResetReactive } from '@/hooks'
 import { useDict } from '@/hooks/app'
 import { encryptByRsa } from '@/utils/encrypt'
 import { isIPv4 } from '@/utils/validate'
@@ -103,13 +103,15 @@ import { isIPv4 } from '@/utils/validate'
 const emit = defineEmits<{
   (e: 'save-success'): void
 }>()
+
 const { width } = useWindowSize()
-const { storage_type_enum } = useDict('storage_type_enum')
 
 const dataId = ref('')
+const visible = ref(false)
 const isUpdate = computed(() => !!dataId.value)
 const title = computed(() => (isUpdate.value ? '修改存储' : '新增存储'))
 const formRef = ref<FormInstance>()
+const { storage_type_enum } = useDict('storage_type_enum')
 
 const rules: FormInstance['rules'] = {
   name: [{ required: true, message: '请输入名称' }],
@@ -118,14 +120,14 @@ const rules: FormInstance['rules'] = {
   accessKey: [{ required: true, message: '请输入访问密钥' }],
   secretKey: [{ required: true, message: '请输入私有密钥' }],
   endpoint: [{ required: true, message: '请输入终端节点' }],
-  bucketName: [{ required: true, message: '请输入桶名称' }]
+  bucketName: [{ required: true, message: '请输入桶名称' }],
 }
 
-const { form, resetForm } = useForm({
+const [form, resetForm] = useResetReactive({
   type: 2,
   isDefault: false,
   sort: 999,
-  status: 1
+  status: 1,
 })
 /** 获取url的protocol和endpoint */
 const stripProtocol = (url: string): { endpoint: string, protocol: string } => {
@@ -152,23 +154,6 @@ const reset = () => {
   resetForm()
 }
 
-const visible = ref(false)
-// 新增
-const onAdd = () => {
-  reset()
-  dataId.value = ''
-  visible.value = true
-}
-
-// 修改
-const onUpdate = async (id: string) => {
-  reset()
-  dataId.value = id
-  const res = await getStorage(id)
-  Object.assign(form, res.data)
-  visible.value = true
-}
-
 // 保存
 const save = async () => {
   try {
@@ -177,7 +162,7 @@ const save = async () => {
     const data = {
       ...form,
       secretKey: form.type === 1 && !form.secretKey.includes('*') ? encryptByRsa(form.secretKey) : null,
-      domain: form.domain || defaultDomain.value
+      domain: form.domain || defaultDomain.value,
     }
     if (isUpdate.value) {
       await updateStorage(data, dataId.value)
@@ -191,6 +176,22 @@ const save = async () => {
   } catch (error) {
     return false
   }
+}
+
+// 新增
+const onAdd = () => {
+  reset()
+  dataId.value = ''
+  visible.value = true
+}
+
+// 修改
+const onUpdate = async (id: string) => {
+  reset()
+  dataId.value = id
+  const { data } = await getStorage(id)
+  Object.assign(form, data)
+  visible.value = true
 }
 
 defineExpose({ onAdd, onUpdate })

@@ -65,21 +65,14 @@
 
 <script setup lang="ts">
 import type { TableInstance, TableRowSelection } from '@arco-design/web-vue'
-import FileImage from './FileImage.vue'
 import FileRightMenu from './FileRightMenu.vue'
 import type { FileItem } from '@/apis/system'
 import { formatFileSize } from '@/utils'
 
-interface Props {
-  data?: FileItem[]
-  selectedFileIds?: string[]
-  isBatchMode?: boolean
-}
-
 const props = withDefaults(defineProps<Props>(), {
   data: () => [], // 文件数据
   selectedFileIds: () => [],
-  isBatchMode: false // 是否是批量模式
+  isBatchMode: false, // 是否是批量模式
 })
 
 const emit = defineEmits<{
@@ -88,6 +81,14 @@ const emit = defineEmits<{
   (e: 'right-menu-click', mode: string, item: FileItem): void
 }>()
 
+const FileImage = defineAsyncComponent(() => import('./FileImage.vue'))
+
+interface Props {
+  data?: FileItem[]
+  selectedFileIds?: string[]
+  isBatchMode?: boolean
+}
+
 // 文件名称带后缀
 const getFileName = (item: FileItem) => {
   return `${item.name}${item.extension ? `.${item.extension}` : ''}`
@@ -95,7 +96,7 @@ const getFileName = (item: FileItem) => {
 
 const rowSelection: TableRowSelection = reactive({
   type: 'checkbox',
-  showCheckedAll: true
+  showCheckedAll: true,
 })
 
 // 多选
@@ -114,7 +115,7 @@ const handleRightMenuClick = (mode: string, item: FileItem) => {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 :deep(.arco-table-td .arco-table-cell) {
   padding-top: 0;
   padding-bottom: 0;

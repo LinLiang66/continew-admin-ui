@@ -9,7 +9,7 @@ const storeSetup = () => {
     if (_code !== null && _code !== '') {
       dictData.value.push({
         code: _code,
-        items
+        items,
       })
     }
   }
@@ -50,7 +50,7 @@ const storeSetup = () => {
     setDict,
     getDict,
     deleteDict,
-    cleanDict
+    cleanDict,
   }
 }
 

@@ -11,7 +11,7 @@ defineOptions({ name: 'GiFlexibleBox' })
 
 const props = withDefaults(defineProps<Props>(), {
   modelValue: false,
-  direction: 'right'
+  direction: 'right',
 })
 
 interface Props {
@@ -29,7 +29,7 @@ const style = computed(() => {
 })
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .gi-flexible-box {
   transition: all 0.36s;
 }

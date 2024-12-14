@@ -5,7 +5,7 @@ import { useLoading } from '@/hooks'
 export function useRequest<T>(
   api: () => Promise<AxiosResponse<ApiRes<T>>>,
   defaultValue = [] as unknown as T,
-  isLoading = true
+  isLoading = true,
 ) {
   const { loading, setLoading } = useLoading(isLoading)
   const response = ref<T>(defaultValue)

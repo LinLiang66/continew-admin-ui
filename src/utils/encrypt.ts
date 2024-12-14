@@ -33,7 +33,7 @@ export function encryptByAes(word, keyWord = defaultKeyWork) {
   const arcs = CryptoJS.enc.Utf8.parse(word)
   const encrypted = CryptoJS.AES.encrypt(arcs, key, {
     mode: CryptoJS.mode.ECB,
-    padding: CryptoJS.pad.Pkcs7
+    padding: CryptoJS.pad.Pkcs7,
   })
   return encrypted.toString()
 }

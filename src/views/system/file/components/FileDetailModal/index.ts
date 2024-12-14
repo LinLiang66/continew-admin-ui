@@ -12,6 +12,6 @@ export function openFileDetailModal(fileItem: FileItem) {
     modalStyle: { maxWidth: '320px' },
     width: '90%',
     footer: false,
-    content: () => h(ModalContent, { data: fileItem })
+    content: () => h(ModalContent, { data: fileItem }),
   })
 }

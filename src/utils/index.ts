@@ -297,7 +297,7 @@ export function dateFormat(date = new Date(), pattern = YMD_HMS) {
     'm+': date.getMinutes(),
     's+': date.getSeconds(),
     'q+': Math.floor((date.getMonth() + 3) / 3),
-    'S+': date.getMilliseconds()
+    'S+': date.getMilliseconds(),
   }
 
   let formattedDate = pattern // Start with the pattern
@@ -341,7 +341,7 @@ export function parseCron(cron: string) {
   try {
     const parse = expressionNoYear(cron)
     const iter = CronParser.parseExpression(parse, {
-      currentDate: dateFormat(new Date())
+      currentDate: dateFormat(new Date()),
     })
     const result: string[] = []
     for (let i = 1; i <= 5; i++) {

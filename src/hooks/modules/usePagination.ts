@@ -3,7 +3,7 @@ import { useBreakpoint } from '@/hooks'
 
 type Callback = () => void
 
-export type Options = {
+export interface Options {
   defaultPageSize: number
   defaultSizeOptions: number[]
 }
@@ -27,7 +27,7 @@ export function usePagination(callback: Callback, options: Options = { defaultPa
       pagination.current = 1
       pagination.pageSize = size
       callback && callback()
-    }
+    },
   })
 
   watch(
@@ -36,7 +36,7 @@ export function usePagination(callback: Callback, options: Options = { defaultPa
       pagination.simple = ['xs'].includes(breakpoint.value)
       pagination.showTotal = !['xs'].includes(breakpoint.value)
     },
-    { immediate: true }
+    { immediate: true },
   )
 
   const changeCurrent = pagination.onChange
@@ -54,6 +54,6 @@ export function usePagination(callback: Callback, options: Options = { defaultPa
     pagination,
     changeCurrent,
     changePageSize,
-    setTotal
+    setTotal,
   }
 }

@@ -36,8 +36,8 @@ watch(
     selectedKey.value = route.query.type as string || '0'
   },
   {
-    immediate: true
-  }
+    immediate: true,
+  },
 )
 
 // 点击事件
@@ -46,7 +46,7 @@ const onClickItem = (item: FileTypeListItem) => {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 :deep(.arco-card) {
   .arco-card-header {
     border-bottom-style: dashed;

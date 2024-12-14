@@ -1,17 +1,23 @@
 <template>
-  <a-modal v-model:visible="visible" :title="title" :mask-closable="false" :esc-to-close="false"
-    :width="width >= 500 ? 500 : '100%'" draggable @before-ok="save" @ok="saveAfter" @close="reset">
+  <a-modal
+    v-model:visible="visible" :title="title" :mask-closable="false" :esc-to-close="false"
+    :width="width >= 600 ? 600 : '100%'" draggable @before-ok="save" @ok="saveAfter" @close="reset"
+  >
     <GiForm ref="formRef" v-model="form" :options="options" :columns="columns">
       <template #captcha>
         <a-input v-model="form.captcha" placeholder="请输入验证码" :max-length="6" allow-clear style="flex: 1 1" />
-        <a-button class="captcha-btn" :loading="captchaLoading" :disabled="captchaDisable" size="large"
-          @click="onCaptcha">
+        <a-button
+          class="captcha-btn" :loading="captchaLoading" :disabled="captchaDisable" size="large"
+          @click="onCaptcha"
+        >
           {{ captchaBtnName }}
         </a-button>
       </template>
     </GiForm>
-    <Verify ref="VerifyRef" :captcha-type="captchaType" :mode="captchaMode"
-      :img-size="{ width: '330px', height: '155px' }" @success="getCaptcha" />
+    <Verify
+      ref="VerifyRef" :captcha-type="captchaType" :mode="captchaMode"
+      :img-size="{ width: '330px', height: '155px' }" @success="getCaptcha"
+    />
   </a-modal>
 </template>
 
@@ -19,11 +25,11 @@
 import { useWindowSize } from '@vueuse/core'
 import { Message } from '@arco-design/web-vue'
 import NProgress from 'nprogress'
-import { getEmailCaptcha, updateUserEmail, updateUserPassword, updateUserPhone } from '@/apis'
+import { type BehaviorCaptchaReq, getEmailCaptcha, updateUserEmail, updateUserPassword, updateUserPhone } from '@/apis'
 import { encryptByRsa } from '@/utils/encrypt'
 import { useUserStore } from '@/stores'
 import { type Columns, GiForm, type Options } from '@/components/GiForm'
-import { useForm } from '@/hooks'
+import { useResetReactive } from '@/hooks'
 import * as Regexp from '@/utils/regexp'
 import modalErrorWrapper from '@/utils/modal-error-wrapper'
 import router from '@/router'
@@ -34,23 +40,22 @@ const userInfo = computed(() => userStore.userInfo)
 
 const verifyType = ref()
 const title = computed(
-  () => `修改${verifyType.value === 'phone' ? '手机号' : verifyType.value === 'email' ? '邮箱' : '密码'}`
+  () => `修改${verifyType.value === 'phone' ? '手机号' : verifyType.value === 'email' ? '邮箱' : '密码'}`,
 )
 const formRef = ref<InstanceType<typeof GiForm>>()
 
 const options: Options = {
   form: { size: 'large' },
-  col: { xs: 24, sm: 24, md: 24, lg: 24, xl: 24, xxl: 24 },
-  btns: { hide: true }
+  btns: { hide: true },
 }
 
-const { form, resetForm } = useForm({
+const [form, resetForm] = useResetReactive({
   phone: '',
   email: '',
   captcha: '',
   oldPassword: '',
   newPassword: '',
-  rePassword: ''
+  rePassword: '',
 })
 
 const columns: Columns = reactive([
@@ -60,11 +65,11 @@ const columns: Columns = reactive([
     type: 'input',
     rules: [
       { required: true, message: '请输入手机号' },
-      { match: Regexp.Phone, message: '请输入正确的手机号' }
+      { match: Regexp.Phone, message: '请输入正确的手机号' },
     ],
     hide: () => {
       return verifyType.value !== 'phone'
-    }
+    },
   },
   {
     label: '邮箱',
@@ -72,11 +77,11 @@ const columns: Columns = reactive([
     type: 'input',
     rules: [
       { required: true, message: '请输入邮箱' },
-      { match: Regexp.Email, message: '请输入正确的邮箱' }
+      { match: Regexp.Email, message: '请输入正确的邮箱' },
     ],
     hide: () => {
       return verifyType.value !== 'email'
-    }
+    },
   },
   {
     label: '验证码',
@@ -85,7 +90,7 @@ const columns: Columns = reactive([
     rules: [{ required: true, message: '请输入验证码' }],
     hide: () => {
       return !['phone', 'email'].includes(verifyType.value)
-    }
+    },
   },
   {
     label: '当前密码',
@@ -94,7 +99,7 @@ const columns: Columns = reactive([
     rules: [{ required: true, message: '请输入当前密码' }],
     hide: () => {
       return !userInfo.value.pwdResetTime
-    }
+    },
   },
   {
     label: '新密码',
@@ -109,19 +114,19 @@ const columns: Columns = reactive([
           } else {
             callback()
           }
-        }
-      }
+        },
+      },
     ],
     hide: () => {
       return verifyType.value !== 'password'
-    }
+    },
   },
   {
     label: '确认新密码',
     field: 'rePassword',
     type: 'input-password',
     props: {
-      placeholder: '请再次输入新密码'
+      placeholder: '请再次输入新密码',
     },
     rules: [
       { required: true, message: '请再次输入新密码' },
@@ -132,13 +137,13 @@ const columns: Columns = reactive([
           } else {
             callback()
           }
-        }
-      }
+        },
+      },
     ],
     hide: () => {
       return verifyType.value !== 'password'
-    }
-  }
+    },
+  },
 ])
 
 const VerifyRef = ref<InstanceType<any>>()
@@ -173,19 +178,15 @@ const reset = () => {
 }
 
 // 获取验证码
-const getCaptcha = async () => {
+const getCaptcha = async (captchaReq: BehaviorCaptchaReq) => {
   // 发送验证码
   try {
     captchaLoading.value = true
     captchaBtnName.value = '发送中...'
     if (verifyType.value === 'phone') {
-      // await getSmsCaptcha({
-      //   phone: form.phone
-      // })
+      // await getSmsCaptcha(form.phone, captchaReq)
     } else if (verifyType.value === 'email') {
-      await getEmailCaptcha({
-        email: form.email
-      })
+      await getEmailCaptcha(form.email, captchaReq)
     }
     captchaLoading.value = false
     captchaDisable.value = true
@@ -215,14 +216,14 @@ const save = async () => {
       await updateUserPhone({
         phone: form.phone,
         captcha: form.captcha,
-        oldPassword: encryptByRsa(form.oldPassword) as string
+        oldPassword: encryptByRsa(form.oldPassword) as string,
       })
       Message.success('修改成功')
     } else if (verifyType.value === 'email') {
       await updateUserEmail({
         email: form.email,
         captcha: form.captcha,
-        oldPassword: encryptByRsa(form.oldPassword) as string
+        oldPassword: encryptByRsa(form.oldPassword) as string,
       })
       Message.success('修改成功')
     } else if (verifyType.value === 'password') {
@@ -236,7 +237,7 @@ const save = async () => {
       }
       await updateUserPassword({
         oldPassword: encryptByRsa(form.oldPassword) || '',
-        newPassword: encryptByRsa(form.newPassword) || ''
+        newPassword: encryptByRsa(form.newPassword) || '',
       })
     }
     return true
@@ -257,7 +258,7 @@ const saveAfter = async () => {
         const userStore = useUserStore()
         await userStore.logoutCallBack()
         await router.replace('/login')
-      }
+      },
     })
   } else {
     // 修改成功后，重新获取用户信息
@@ -275,7 +276,7 @@ const open = (type: string) => {
 defineExpose({ open })
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .captcha-btn {
   margin-left: 12px;
   min-width: 98px;

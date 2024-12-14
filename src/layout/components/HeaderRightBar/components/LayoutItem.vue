@@ -12,7 +12,7 @@ withDefaults(defineProps<Props>(), {})
 const emit = defineEmits(['click'])
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .layout-item {
   width: 60px;
   height: 50px;

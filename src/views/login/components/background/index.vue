@@ -7,9 +7,9 @@
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script setup lang="ts"></script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .login-bg {
   width: 100%;
   height: 100%;

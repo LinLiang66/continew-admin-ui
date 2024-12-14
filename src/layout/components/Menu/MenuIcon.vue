@@ -2,7 +2,7 @@
   <GiSvgIcon :name="props.icon" :size="18" />
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 interface Props {
   icon?: string
 }
@@ -10,4 +10,4 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {})
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped lang="scss"></style>

@@ -95,9 +95,11 @@
             </a-col>
             <!-- 表达式 -->
             <a-col :span="16">
-              <a-input v-model="cronInputs.cron"
-                       :placeholder="placeholder"
-                       @change="onInputCronChange">
+              <a-input
+                v-model="cronInputs.cron"
+                :placeholder="placeholder"
+                @change="onInputCronChange"
+              >
                 <template #prepend>
                   <span class="allow-click">表达式</span>
                 </template>
@@ -118,7 +120,7 @@
 <script lang="ts">
 </script>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import { useDebounceFn } from '@vueuse/core'
 import CronParser from 'cron-parser'
 import SecondForm from '@/components/GenCron/CronForm/component/second-form.vue'
@@ -135,7 +137,7 @@ const props = withDefaults(defineProps<Partial<CronPropType>>(), {
   disabled: false,
   hideSecond: false,
   hideYear: false,
-  placeholder: '请输入 Cron 表达式'
+  placeholder: '请输入 Cron 表达式',
 })
 const emit = defineEmits(['change', 'update:modelValue'])
 const activeKey = ref(props.hideSecond ? 'minute' : 'second')
@@ -154,7 +156,7 @@ const cronInputs = reactive({
   month: '',
   week: '',
   year: '',
-  cron: ''
+  cron: '',
 })
 
 const previewTimes = ref('执行预览')
@@ -190,7 +192,7 @@ const calculateNextExecutionTimes = (corn: string = cronExpression.value) => {
     // 解析表达式
     const date = dateFormat(new Date())
     const iter = CronParser.parseExpression(parse, {
-      currentDate: date
+      currentDate: date,
     })
     const result: string[] = []
     for (let i = 1; i <= 5; i++) {

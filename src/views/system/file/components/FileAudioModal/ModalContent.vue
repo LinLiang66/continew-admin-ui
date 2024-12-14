@@ -51,7 +51,7 @@ if (obj && obj.top && obj.left) {
   axis.value.left = obj.left
 }
 const { x, y } = useDraggable(audioRef, {
-  initialValue: { x: axis.value.left - boxWidth.value, y: axis.value.top }
+  initialValue: { x: axis.value.left - boxWidth.value, y: axis.value.top },
 })
 
 const audioStyle = computed(() => {
@@ -72,7 +72,7 @@ const audioStyle = computed(() => {
   sessionStorage.setItem('AudioDialogXY', JSON.stringify({ top, left }))
   return {
     left: `${left}px`,
-    top: `${top}px`
+    top: `${top}px`,
   }
 })
 
@@ -82,7 +82,7 @@ const close = () => {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .audio-box {
   width: 300px;
   position: fixed;

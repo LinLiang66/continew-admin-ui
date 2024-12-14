@@ -1,16 +1,28 @@
 <template>
-  <a-form ref="formRef" :model="form" :rules="rules" size="large" layout="vertical" :disabled="!isUpdate" class="form">
-    <a-list class="list-layout" :bordered="false" :loading="loading">
+  <a-spin :loading="loading">
+    <a-form
+      ref="formRef"
+      :model="form"
+      :rules="rules"
+      size="large"
+      layout="vertical"
+      :disabled="!isUpdate"
+      class="form"
+    >
       <a-form-item class="image-item" field="SITE_LOGO" hide-label>
         {{ siteConfig.SITE_LOGO.name }}
         <template #extra>
           {{ siteConfig.SITE_LOGO.description }}
           <br />
-          <a-upload :file-list="logoFile ? [logoFile] : []" accept="image/*" :show-file-list="false"
-                    :custom-request="handleUploadLogo" @change="handleChangeLogo">
+          <a-upload
+            :file-list="logoFile ? [logoFile] : []" accept="image/*" :show-file-list="false"
+            :custom-request="handleUploadLogo" @change="handleChangeLogo"
+          >
             <template #upload-button>
-              <div :class="`arco-upload-list-item${logoFile && logoFile.status === 'error' ? ' arco-upload-list-item-error' : ''
-                }`">
+              <div
+                :class="`arco-upload-list-item${logoFile && logoFile.status === 'error' ? ' arco-upload-list-item-error' : ''
+                }`"
+              >
                 <div v-if="logoFile && logoFile.url" class="arco-upload-list-picture custom-upload-avatar logo">
                   <img :src="logoFile.url" alt="Logo" />
                   <div v-if="isUpdate" class="arco-upload-list-picture-mask logo">
@@ -32,13 +44,19 @@
         <template #extra>
           {{ siteConfig.SITE_FAVICON.description }}
           <br />
-          <a-upload :file-list="faviconFile ? [faviconFile] : []" accept="image/*" :show-file-list="false"
-            :custom-request="handleUploadFavicon" @change="handleChangeFavicon">
+          <a-upload
+            :file-list="faviconFile ? [faviconFile] : []" accept="image/*" :show-file-list="false"
+            :custom-request="handleUploadFavicon" @change="handleChangeFavicon"
+          >
             <template #upload-button>
-              <div :class="`arco-upload-list-item${faviconFile && faviconFile.status === 'error' ? ' arco-upload-list-item-error' : ''
-                }`">
-                <div v-if="faviconFile && faviconFile.url"
-                  class="arco-upload-list-picture custom-upload-avatar favicon">
+              <div
+                :class="`arco-upload-list-item${faviconFile && faviconFile.status === 'error' ? ' arco-upload-list-item-error' : ''
+                }`"
+              >
+                <div
+                  v-if="faviconFile && faviconFile.url"
+                  class="arco-upload-list-picture custom-upload-avatar favicon"
+                >
                   <img :src="faviconFile.url" alt="favicon" />
                   <div v-if="isUpdate" class="arco-upload-list-picture-mask favicon">
                     <IconEdit />
@@ -55,81 +73,80 @@
         </template>
       </a-form-item>
       <a-form-item class="input-item" field="SITE_TITLE" :label="siteConfig.SITE_TITLE.name">
-        <a-input v-model.trim="form.SITE_TITLE" placeholder="请输入系统标题" :max-length="18" show-word-limit />
+        <a-input v-model.trim="form.SITE_TITLE" class="input-width" placeholder="请输入系统标题" :max-length="18" show-word-limit />
       </a-form-item>
       <a-form-item class="input-item" field="SITE_DESCRIPTION" :label="siteConfig.SITE_DESCRIPTION.name">
         <a-textarea
           v-model.trim="form.SITE_DESCRIPTION"
+          class="input-width"
           placeholder="请输入系统描述"
           :auto-size="{ minRows: 1, maxRows: 3 }"
         />
       </a-form-item>
       <a-form-item class="input-item" field="SITE_COPYRIGHT" :label="siteConfig.SITE_COPYRIGHT.name">
-        <a-input v-model.trim="form.SITE_COPYRIGHT" placeholder="请输入版权信息" />
+        <a-input v-model.trim="form.SITE_COPYRIGHT" class="input-width" placeholder="请输入版权信息" />
       </a-form-item>
-      <a-form-item class="input-item" field="SITE_BEIAN" :label="siteConfig.SITE_BEIAN.name">
-        <a-input v-model.trim="form.SITE_BEIAN" placeholder="请输入备案号" :max-length="30" show-word-limit style="width: 100%;" />
+      <a-form-item field="SITE_BEIAN" :label="siteConfig.SITE_BEIAN.name">
+        <a-input v-model.trim="form.SITE_BEIAN" class="input-width" placeholder="请输入备案号" :max-length="30" show-word-limit />
       </a-form-item>
-      <div style="margin-top: 20px">
-        <a-space>
-          <a-button v-if="!isUpdate" v-permission="['system:config:update']" type="primary" @click="onUpdate">
-            <template #icon>
-              <icon-edit />
-            </template>修改
-          </a-button>
-          <a-button v-if="!isUpdate" v-permission="['system:config:reset']" @click="onResetValue">
-            <template #icon>
-              <icon-undo />
-            </template>恢复默认
-          </a-button>
-          <a-button v-if="isUpdate" type="primary" @click="handleSave">
-            <template #icon>
-              <icon-save />
-            </template>保存
-          </a-button>
-          <a-button v-if="isUpdate" @click="reset">
-            <template #icon>
-              <icon-refresh />
-            </template>重置
-          </a-button>
-          <a-button v-if="isUpdate" @click="handleCancel">
-            <template #icon>
-              <icon-undo />
-            </template>取消
-          </a-button>
-        </a-space>
-      </div>
-    </a-list>
-  </a-form>
+      <a-space style="margin-bottom: 16px">
+        <a-button v-if="!isUpdate" v-permission="['system:config:update']" type="primary" @click="onUpdate">
+          <template #icon>
+            <icon-edit />
+          </template>修改
+        </a-button>
+        <a-button v-if="!isUpdate" v-permission="['system:config:reset']" @click="onResetValue">
+          <template #icon>
+            <icon-undo />
+          </template>恢复默认
+        </a-button>
+        <a-button v-if="isUpdate" type="primary" @click="handleSave">
+          <template #icon>
+            <icon-save />
+          </template>保存
+        </a-button>
+        <a-button v-if="isUpdate" @click="reset">
+          <template #icon>
+            <icon-refresh />
+          </template>重置
+        </a-button>
+        <a-button v-if="isUpdate" @click="handleCancel">
+          <template #icon>
+            <icon-undo />
+          </template>取消
+        </a-button>
+      </a-space>
+    </a-form>
+  </a-spin>
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import { type FileItem, type FormInstance, Message, Modal, type RequestOption } from '@arco-design/web-vue'
 import {
   type OptionResp,
   type SiteConfig,
   listOption,
   resetOptionValue,
-  updateOption
+  updateOption,
 } from '@/apis/system'
 import { useAppStore } from '@/stores'
-import { useForm } from '@/hooks'
+import { useResetReactive } from '@/hooks'
 import { fileToBase64 } from '@/utils'
 
 defineOptions({ name: 'BasicSetting' })
 
 const loading = ref<boolean>(false)
 const formRef = ref<FormInstance>()
-const { form } = useForm({
+const [form] = useResetReactive({
   SITE_FAVICON: '',
   SITE_LOGO: '',
   SITE_TITLE: '',
-  SITE_COPYRIGHT: ''
+  SITE_COPYRIGHT: '',
 })
 const rules: FormInstance['rules'] = {
   SITE_TITLE: [{ required: true, message: '请输入系统标题' }],
   SITE_DESCRIPTION: [{ required: true, message: '请输入系统描述' }],
-  SITE_COPYRIGHT: [{ required: true, message: '请输入版权信息' }]
+  SITE_COPYRIGHT: [{ required: true, message: '请输入版权信息' }],
 }
 
 const siteConfig = ref<SiteConfig>({
@@ -138,7 +155,7 @@ const siteConfig = ref<SiteConfig>({
   SITE_TITLE: {},
   SITE_DESCRIPTION: {},
   SITE_COPYRIGHT: {},
-  SITE_BEIAN: {}
+  SITE_BEIAN: {},
 })
 const faviconFile = ref<FileItem>({ uid: '-1' })
 const logoFile = ref<FileItem>({ uid: '-2' })
@@ -168,7 +185,7 @@ const handleCancel = () => {
 }
 
 const queryForm = reactive({
-  category: 'SITE'
+  category: 'SITE',
 })
 // 查询列表数据
 const getDataList = async () => {
@@ -190,7 +207,7 @@ const handleSave = async () => {
   await updateOption(
     Object.entries(form).map(([key, value]) => {
       return { id: siteConfig.value[key].id, code: key, value }
-    })
+    }),
   )
   appStore.setSiteConfig(form)
   await getDataList()
@@ -210,7 +227,7 @@ const onResetValue = () => {
     content: '确认恢复基础配置为默认值吗？',
     hideCancel: false,
     maskClosable: false,
-    onOk: handleResetValue
+    onOk: handleResetValue,
   })
 }
 
@@ -236,12 +253,12 @@ const handleUploadFavicon = (options: RequestOption) => {
   return {
     abort() {
       controller.abort()
-    }
+    },
   }
 }
 const handleChangeFavicon = (_: any, currentFile: any) => {
   faviconFile.value = {
-    ...currentFile
+    ...currentFile,
   }
 }
 
@@ -267,12 +284,12 @@ const handleUploadLogo = (options: RequestOption) => {
   return {
     abort() {
       controller.abort()
-    }
+    },
   }
 }
 const handleChangeLogo = (_: any, currentFile: any) => {
   logoFile.value = {
-    ...currentFile
+    ...currentFile,
   }
 }
 
@@ -281,7 +298,7 @@ onMounted(() => {
 })
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .logo {
   width: 50px;
   height: 50px;
@@ -296,18 +313,23 @@ onMounted(() => {
   line-height: 46px;
 }
 
+.input-width {
+  width: 500px;
+}
+
 .arco-form .image-item,
 .input-item {
+  margin-bottom: 5px;
+}
+
+:deep(.arco-form-item-layout-vertical > .arco-form-item-label-col) {
   margin-bottom: 0;
 }
 
-:deep(.arco-list-medium .arco-list-content-wrapper .arco-list-content > .arco-list-item) {
-  padding: 13px;
-  border-bottom: 1px solid var(--color-fill-3);
-}
-
-:deep(.arco-form-item-wrapper-col) {
-  width: 100%;
-  max-width: 500px;
+// responsive
+.mobile {
+  .input-width {
+    width: 100%;
+  }
 }
 </style>

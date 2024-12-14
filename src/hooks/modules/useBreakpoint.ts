@@ -12,7 +12,7 @@ export function useBreakpoint() {
     md: 768, // >=768
     lg: 992, // >=992
     xl: 1200, // >=1200
-    xxl: 1600 // >=1600
+    xxl: 1600, // >=1600
   })
 
   const arr = breakpoints.current() as ComputedRef<Breakpoint[]>

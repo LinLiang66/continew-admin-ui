@@ -11,7 +11,7 @@ interface Options<T, U> {
   paginationOption?: paginationOptions
 }
 
-type PaginationParams = { page: number, size: number }
+interface PaginationParams { page: number, size: number }
 type Api<T> = (params: PaginationParams) => Promise<ApiRes<PageRes<T[]>>> | Promise<ApiRes<T[]>>
 
 export function useTable<T extends U, U = T>(api: Api<T>, options?: Options<T, U>) {
@@ -57,10 +57,15 @@ export function useTable<T extends U, U = T>(api: Api<T>, options?: Options<T, U
     pagination.onChange(1)
   }
 
+  // 刷新
+  const refresh = () => {
+    getTableData()
+  }
+
   // 删除
   const handleDelete = async <T>(
     deleteApi: () => Promise<ApiRes<T>>,
-    options?: { title?: string, content?: string, successTip?: string, showModal?: boolean }
+    options?: { title?: string, content?: string, successTip?: string, showModal?: boolean },
   ): Promise<boolean | undefined> => {
     const onDelete = async () => {
       try {
@@ -68,7 +73,7 @@ export function useTable<T extends U, U = T>(api: Api<T>, options?: Options<T, U
         if (res.success) {
           Message.success(options?.successTip || '删除成功')
           selectedKeys.value = []
-          getTableData()
+          await getTableData()
         }
         return res.success
       } catch (error) {
@@ -85,9 +90,9 @@ export function useTable<T extends U, U = T>(api: Api<T>, options?: Options<T, U
       okButtonProps: { status: 'danger' },
       hideCancel: false,
       maskClosable: false,
-      onBeforeOk: onDelete
+      onBeforeOk: onDelete,
     })
   }
 
-  return { loading, tableData, getTableData, search, pagination, selectedKeys, select, selectAll, handleDelete }
+  return { loading, tableData, getTableData, search, pagination, selectedKeys, select, selectAll, handleDelete, refresh }
 }

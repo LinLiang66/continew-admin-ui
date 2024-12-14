@@ -50,8 +50,8 @@ export default defineComponent({
   props: useFormProps({
     defaultValue: '?',
     props: {
-      day: { type: String, default: '*' }
-    }
+      day: { type: String, default: '*' },
+    },
   }),
   emits: useFromEmits(),
   setup(props, context) {
@@ -66,7 +66,7 @@ export default defineComponent({
       // 0,7表示周日 1表示周一
       valueRange: { start: 1, end: 7 },
       valueLoop: { start: 2, interval: 1 },
-      disabled: disabledChoice
+      disabled: disabledChoice,
     })
     const weekOptions = computed(() => {
       const options: { label: string, value: number }[] = []
@@ -74,7 +74,7 @@ export default defineComponent({
         const weekName: string = WEEK_MAP[weekKey]
         options.push({
           value: Number.parseInt(weekKey),
-          label: weekName
+          label: weekName,
         })
       }
       return options
@@ -83,13 +83,13 @@ export default defineComponent({
     const typeRangeSelectAttrs = computed(() => ({
       disabled: setup.typeRangeAttrs.value.disabled,
       size: 'small',
-      class: ['w80']
+      class: ['w80'],
     }))
 
     const typeLoopSelectAttrs = computed(() => ({
       disabled: setup.typeLoopAttrs.value.disabled,
       size: 'small',
-      class: ['w80']
+      class: ['w80'],
     }))
 
     watch(() => props.day, () => {
@@ -101,8 +101,8 @@ export default defineComponent({
       weekOptions,
       typeLoopSelectAttrs,
       typeRangeSelectAttrs,
-      WEEK_MAP
+      WEEK_MAP,
     }
-  }
+  },
 })
 </script>

@@ -7,9 +7,12 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    Avatar: typeof import('./../components/Avatar/index.vue')['default']
     Breadcrumb: typeof import('./../components/Breadcrumb/index.vue')['default']
+    CellCopy: typeof import('./../components/CellCopy/index.vue')['default']
     Chart: typeof import('./../components/Chart/index.vue')['default']
     CronForm: typeof import('./../components/GenCron/CronForm/index.vue')['default']
+    CronModal: typeof import('./../components/GenCron/CronModal/index.vue')['default']
     CronModel: typeof import('./../components/GenCron/CronModel/index.vue')['default']
     DateRangePicker: typeof import('./../components/DateRangePicker/index.vue')['default']
     DayForm: typeof import('./../components/GenCron/CronForm/component/day-form.vue')['default']
@@ -21,10 +24,12 @@ declare module 'vue' {
     GiCellTags: typeof import('./../components/GiCell/GiCellTags.vue')['default']
     GiCodeView: typeof import('./../components/GiCodeView/index.vue')['default']
     GiDot: typeof import('./../components/GiDot/index.tsx')['default']
+    GiEditTable: typeof import('./../components/GiEditTable/GiEditTable.vue')['default']
     GiFlexibleBox: typeof import('./../components/GiFlexibleBox/index.vue')['default']
     GiFooter: typeof import('./../components/GiFooter/index.vue')['default']
     GiForm: typeof import('./../components/GiForm/src/GiForm.vue')['default']
     GiIconSelector: typeof import('./../components/GiIconSelector/index.vue')['default']
+    GiIframe: typeof import('./../components/GiIframe/index.vue')['default']
     GiOption: typeof import('./../components/GiOption/index.vue')['default']
     GiOptionItem: typeof import('./../components/GiOptionItem/index.vue')['default']
     GiOverFlowTags: typeof import('./../components/GiOverFlowTags/index.vue')['default']
@@ -48,6 +53,7 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     SecondForm: typeof import('./../components/GenCron/CronForm/component/second-form.vue')['default']
     TextCopy: typeof import('./../components/TextCopy/index.vue')['default']
+    UserSelect: typeof import('./../components/UserSelect/index.vue')['default']
     Verify: typeof import('./../components/Verify/index.vue')['default']
     VerifyPoints: typeof import('./../components/Verify/Verify/VerifyPoints.vue')['default']
     VerifySlide: typeof import('./../components/Verify/Verify/VerifySlide.vue')['default']

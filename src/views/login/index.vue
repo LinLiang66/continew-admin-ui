@@ -1,5 +1,5 @@
 <template>
-  <div class="login pc">
+  <div v-if="isDesktop" class="login pc">
     <h3 class="login-logo">
       <img v-if="logo" :src="logo" alt="logo" />
       <img v-else src="/logo.svg" alt="logo" />
@@ -15,13 +15,13 @@
       <a-col :xs="24" :sm="12" :md="11">
         <div class="login-right">
           <h3 v-if="isEmailLogin" class="login-right__title">邮箱登录</h3>
-          <EmailLogin v-show="isEmailLogin" />
-          <a-tabs v-show="!isEmailLogin" class="login-right__form">
+          <EmailLogin v-if="isEmailLogin" />
+          <a-tabs v-else v-model:activeKey="activeTab" class="login-right__form">
             <a-tab-pane key="1" title="账号登录">
-              <AccountLogin />
+              <component :is="AccountLogin" v-if="activeTab === '1'" />
             </a-tab-pane>
             <a-tab-pane key="2" title="手机号登录">
-              <PhoneLogin />
+              <component :is="PhoneLogin" v-if="activeTab === '2'" />
             </a-tab-pane>
           </a-tabs>
           <div class="login-right__oauth">
@@ -50,7 +50,8 @@
     <GiThemeBtn class="theme-btn" />
     <Background />
   </div>
-  <div class="login h5">
+
+  <div v-else class="login h5">
     <div class="login-logo">
       <img v-if="logo" :src="logo" alt="logo" />
       <img v-else src="/logo.svg" alt="logo" />
@@ -60,13 +61,13 @@
       <a-col :xs="24" :sm="12" :md="11">
         <div class="login-right">
           <h3 v-if="isEmailLogin" class="login-right__title">邮箱登录</h3>
-          <EmailLogin v-show="isEmailLogin" />
-          <a-tabs v-show="!isEmailLogin" class="login-right__form">
+          <EmailLogin v-if="isEmailLogin" />
+          <a-tabs v-else v-model:activeKey="activeTab" class="login-right__form">
             <a-tab-pane key="1" title="账号登录">
-              <AccountLogin />
+              <component :is="AccountLogin" v-if="activeTab === '1'" />
             </a-tab-pane>
             <a-tab-pane key="2" title="手机号登录">
-              <PhoneLogin />
+              <component :is="PhoneLogin" v-if="activeTab === '2'" />
             </a-tab-pane>
           </a-tabs>
         </div>
@@ -89,6 +90,7 @@
 </template>
 
 <script setup lang="ts">
+import { computed, ref } from 'vue'
 import Background from './components/background/index.vue'
 import AccountLogin from './components/account/index.vue'
 import PhoneLogin from './components/phone/index.vue'
@@ -105,6 +107,8 @@ const title = computed(() => appStore.getTitle())
 const logo = computed(() => appStore.getLogo())
 
 const isEmailLogin = ref(false)
+const activeTab = ref('1')
+
 // 切换登录模式
 const toggleLoginMode = () => {
   isEmailLogin.value = !isEmailLogin.value
@@ -117,7 +121,7 @@ const onOauth = async (source: string) => {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 @media screen and (max-width: 570px) {
   .pc {
     display: none !important;
@@ -472,8 +476,7 @@ const onOauth = async (source: string) => {
           margin-right: 10px;
         }
 
-        .mode:hover,
-        .mode svg:hover {
+        .mode:hover {
           background: rgba(var(--primary-6), 0.05);
           border: 1px solid rgb(var(--primary-3));
           color: rgb(var(--arcoblue-6));

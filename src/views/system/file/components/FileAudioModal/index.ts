@@ -20,14 +20,14 @@ function createModal<T extends { callback?: () => void }>(component: Component, 
         document.body.removeChild(el)
         options?.callback && options?.callback()
       }, 350)
-    }
+    },
   })
 
   instance.use(ArcoVue)
   instance.use(ArcoVueIcon)
   instance.mount(el)
 }
-type TFileOptions = { data: FileItem, callback?: () => void }
+interface TFileOptions { data: FileItem, callback?: () => void }
 
 /** 预览 音频文件 弹窗 */
 let fileAudioId = ''
@@ -39,6 +39,6 @@ export function previewFileAudioModal(data: FileItem) {
     // 关闭的回调
     callback: () => {
       fileAudioId = ''
-    }
+    },
   })
 }

@@ -1,8 +1,12 @@
 <template>
-  <div v-if="isDesktop" class="asider" :class="{ 'app-menu-dark': appStore.menuDark }"
-    :style="appStore.menuDark ? appStore.themeCSSVar : undefined">
-    <a-layout-sider class="menu" collapsible breakpoint="xl" hide-trigger :width="230"
-      :collapsed="appStore.menuCollapse" @collapse="handleCollapse">
+  <div
+    v-if="isDesktop" class="asider" :class="{ 'app-menu-dark': appStore.menuDark }"
+    :style="appStore.menuDark ? appStore.themeCSSVar : undefined"
+  >
+    <a-layout-sider
+      class="menu" collapsible breakpoint="xl" hide-trigger :width="230"
+      :collapsed="appStore.menuCollapse" @collapse="handleCollapse"
+    >
       <Logo :collapsed="appStore.menuCollapse"></Logo>
       <a-scrollbar outer-class="menu-scroll-view" style="height: 100%; overflow: auto">
         <Menu></Menu>
@@ -26,7 +30,7 @@ const handleCollapse = (isCollapsed: boolean) => {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 :deep(.arco-menu.arco-menu-vertical.arco-menu-collapsed) {
 
   // Menu菜单组件修改

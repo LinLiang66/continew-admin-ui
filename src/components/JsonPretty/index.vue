@@ -24,7 +24,7 @@ const onCopy = (data: object) => {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .json_pretty_container {
   width: 100%;
   height: 100%;

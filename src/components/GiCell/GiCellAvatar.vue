@@ -1,20 +1,39 @@
 <template>
   <a-space fill>
-    <a-avatar :size="24" shape="circle">
-      <img :src="props.avatar" alt="avatar" />
-    </a-avatar>
-    <a-link v-if="props.isLink" @click="emit('click')">{{ props.name }}</a-link>
-    <span v-else>{{ props.name }}</span>
+    <Avatar :src="props.avatar" :name="props.name" :size="24" />
+    <a-link v-if="props.isLink" @click="emit('click')">
+      <a-typography-paragraph
+        class="link-text"
+        :ellipsis="{
+          rows: 1,
+          showTooltip: true,
+          css: true,
+        }"
+      >
+        {{ props.name }}
+      </a-typography-paragraph>
+    </a-link>
+    <span v-else>
+      <a-typography-paragraph
+        :ellipsis="{
+          rows: 1,
+          showTooltip: true,
+          css: true,
+        }"
+      >
+        {{ props.name }}
+      </a-typography-paragraph>
+    </span>
   </a-space>
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 defineOptions({ name: 'GiCellAvatar' })
 
 const props = withDefaults(defineProps<Props>(), {
   avatar: '',
   name: '',
-  isLink: false // 是否可以点击
+  isLink: false, // 是否可以点击
 })
 
 const emit = defineEmits<{
@@ -22,10 +41,10 @@ const emit = defineEmits<{
 }>()
 
 interface Props {
-  avatar: string
+  avatar?: string
   name: string
   isLink?: boolean
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped lang="scss"></style>

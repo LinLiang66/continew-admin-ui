@@ -24,7 +24,7 @@ import PasswordPolicy from './Security.vue'
 defineOptions({ name: 'SettingProfile' })
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .gi_page {
   background-color: var(--color-bg-1);
 }

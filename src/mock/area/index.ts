@@ -19,6 +19,6 @@ export default defineMock([
         const data = parent?.item?.children?.map((i) => ({ label: i.label, code: i.code }))
         return resultSuccess(data)
       }
-    }
-  }
+    },
+  },
 ])

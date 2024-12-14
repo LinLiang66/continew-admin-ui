@@ -29,7 +29,7 @@ const directive: Directive = {
   },
   updated(el: HTMLElement, binding: DirectiveBinding) {
     checkPermission(el, binding)
-  }
+  },
 }
 
 export default directive
